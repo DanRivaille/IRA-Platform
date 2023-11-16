@@ -21,7 +21,6 @@ class Algorithm(ABC):
     """
     Saves the current state of the algorithm
     """
-    @staticmethod
     @abstractmethod
-    def save():
+    def save(self):
         pass
