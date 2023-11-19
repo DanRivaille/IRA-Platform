@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 import numpy as np
 from scipy.io import savemat
 
-from src.Utils.utils import stack_arrays
+from src.utils.utils import stack_arrays
 
 WORK_FOLDER = '/work/ivan.santos'
 SCRATCH_FOLDER = '/scratch/ivan.santos'

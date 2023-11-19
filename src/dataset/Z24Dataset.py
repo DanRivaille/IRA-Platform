@@ -1,10 +1,12 @@
 import os
 from datetime import datetime, timedelta
 
+from torch.utils.data import Dataset
 import numpy as np
 from scipy.io import loadmat
 
-from src.Utils.utils import stack_arrays
+from CustomTorchDataset import CustomTorchDataset
+from src.utils.utils import stack_arrays
 
 DATA_FOLDER = '/work/ivan.santos/datasets/z24/mat_files'
 
@@ -33,3 +35,6 @@ class Z24Dataset:
                 data = stack_arrays(data, new_data)
 
         return Z24Dataset(data)
+
+    def get_torch_dataset(self) -> Dataset:
+        return CustomTorchDataset(self.data)
