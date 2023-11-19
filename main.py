@@ -2,6 +2,7 @@ from datetime import datetime
 
 from src.dataset.Z24Dataset import Z24Dataset
 from src.config.ConfigParams import ConfigParams
+from src.utils.plot_functions import plot_signal
 
 config_params = ConfigParams.load('/home/ivan.santos/repositories/IRA-Platform/config_files/config_example.json')
 
@@ -13,6 +14,13 @@ sequences_length = config_params.get_params_dict('preprocess_params').get('seque
 
 
 dataset = Z24Dataset.load(first_date, last_date, sensor_number)
-dataset.reshape_in_sequences(sequences_length, True)
+
+
+plot_signal(dataset.data[1][:sequences_length], save=True, filename='original.png')
+
+dataset.normalize_data(is_train_data=True, inplace=True)
+dataset.reshape_in_sequences(sequences_length, inplace=True)
+
+plot_signal(dataset.data[65], save=True, filename='reshaped.png')
 
 print(dataset.data.shape)

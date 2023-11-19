@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from torch.utils.data import Dataset
 import numpy as np
 from scipy.io import loadmat
+from sklearn.preprocessing import MinMaxScaler
 
 from src.dataset.CustomTorchDataset import CustomTorchDataset
 from src.utils.utils import stack_arrays
@@ -12,6 +13,7 @@ DATA_FOLDER = '/work/ivan.santos/datasets/z24/mat_files'
 
 
 class Z24Dataset:
+    scaler = MinMaxScaler(feature_range=(-1, 1))
 
     def __init__(self, data: np.ndarray):
         self.data = data
@@ -36,6 +38,19 @@ class Z24Dataset:
                 data = stack_arrays(data, new_data)
 
         return Z24Dataset(data)
+
+    def normalize_data(self, is_train_data: bool = True, inplace: bool = False):
+        original_shape = self.data.shape
+        data_to_transform = self.data.reshape((-1, 1))
+
+        if is_train_data:
+            Z24Dataset.scaler.fit(data_to_transform)
+
+        data_normalized = Z24Dataset.scaler.transform(data_to_transform).reshape(original_shape)
+        if inplace:
+            self.data = data_normalized
+        else:
+            return Z24Dataset(data_normalized)
 
     def reshape_in_sequences(self, sequences_length: int, inplace: bool = False):
         n_samples, sample_length = self.data.shape
