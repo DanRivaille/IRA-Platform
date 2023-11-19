@@ -1,7 +1,8 @@
 {
   "id": "example_config",
   "preprocess_params": {
-    "sequences_length": 1000
+    "sequences_length": 1000,
+    "sensor_number": 0
   },
   "train_params": {
     "first_date": "01/02/1998",

@@ -1,13 +1,18 @@
 from datetime import datetime
 
 from src.dataset.Z24Dataset import Z24Dataset
+from src.config.ConfigParams import ConfigParams
 
-first_date = datetime(1998, 2, 1)
-last_date = datetime(1998, 2, 2)
-sensor_number = 0
+config_params = ConfigParams.load('/home/ivan.santos/repositories/IRA-Platform/config_files/config_example.json')
+
+first_date = datetime.strptime(config_params.get_params_dict('train_params').get('first_date'), "%d/%m/%Y")
+last_date = datetime.strptime(config_params.get_params_dict('train_params').get('last_date'), "%d/%m/%Y")
+sensor_number = config_params.get_params_dict('preprocess_params').get('sensor_number')
+
+sequences_length = config_params.get_params_dict('preprocess_params').get('sequences_length')
 
 
 dataset = Z24Dataset.load(first_date, last_date, sensor_number)
-dataset.reshape_in_sequences(50, True)
+dataset.reshape_in_sequences(sequences_length, True)
 
 print(dataset.data.shape)

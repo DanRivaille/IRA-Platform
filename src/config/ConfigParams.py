@@ -21,3 +21,6 @@ class ConfigParams:
             config_params = load(config_file)
 
         return ConfigParams(config_params, filepath)
+
+    def get_params_dict(self, key_param: str) -> str | dict | None:
+        return self.params.get(key_param, None)
