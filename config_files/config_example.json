@@ -8,5 +8,9 @@
     "first_date": "01/02/1998",
     "last_date": "02/02/1998"
   },
+  "validation_params": {
+    "first_date": "01/03/1998",
+    "last_date": "07/03/1998"
+  },
   "test_params": {}
 }
