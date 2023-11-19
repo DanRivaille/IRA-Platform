@@ -27,6 +27,7 @@ grpcio @ file:///opt/conda/conda-bld/grpcio_1655801038495/work
 h5py @ file:///croot/h5py_1691589708553/work
 idna @ file:///croot/idna_1666125576474/work
 Jinja2 @ file:///croot/jinja2_1666908132255/work
+joblib==1.3.2
 keras @ file:///home/builder/mesters/opt/envs/tensorflow/conda-bld/keras_1678126437030/work/keras-2.11.0-py2.py3-none-any.whl
 Keras-Preprocessing @ file:///tmp/build/80754af9/keras-preprocessing_1612283640596/work
 kiwisolver==1.4.5
@@ -57,6 +58,7 @@ python-dotenv==1.0.0
 requests @ file:///croot/requests_1690400202158/work
 requests-oauthlib==1.3.0
 rsa @ file:///tmp/build/80754af9/rsa_1614366226499/work
+scikit-learn==1.3.2
 scipy @ file:///croot/scipy_1696543286448/work/dist/scipy-1.11.3-cp310-cp310-linux_x86_64.whl#sha256=16a8c87e543daeb96d1310b2283f542fef2de84ee7090f60187eb71f71cb430c
 six @ file:///tmp/build/80754af9/six_1644875935023/work
 sklearn==0.0.post11
@@ -67,6 +69,7 @@ tensorboard-plugin-wit @ file:///home/builder/tkoch/workspace/tensorflow/tensorb
 tensorflow @ file:///home/builder/mesters/opt/envs/tensorflow/conda-bld/tensorflow-base_1678210207252/work/tensorflow_pkg/tensorflow-2.11.0-cp310-cp310-linux_x86_64.whl
 tensorflow-estimator @ file:///home/builder/mesters/opt/envs/tensorflow/conda-bld/tensorflow-estimator_1678126842282/work/tensorflow_estimator-2.11.0-py2.py3-none-any.whl
 termcolor @ file:///croot/termcolor_1668084651543/work
+threadpoolctl==3.2.0
 torch @ file:///croot/pytorch_1686931851744/work
 typing_extensions @ file:///croot/typing_extensions_1690297465030/work
 urllib3 @ file:///croot/urllib3_1698257533958/work
