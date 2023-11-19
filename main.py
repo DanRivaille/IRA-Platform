@@ -6,5 +6,8 @@ first_date = datetime(1998, 2, 1)
 last_date = datetime(1998, 2, 2)
 sensor_number = 0
 
-data = Z24Dataset.load(first_date, last_date, sensor_number)
-print(data.data.shape)
+
+dataset = Z24Dataset.load(first_date, last_date, sensor_number)
+dataset.reshape_in_sequences(50, True)
+
+print(dataset.data.shape)

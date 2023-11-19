@@ -37,11 +37,16 @@ class Z24Dataset:
 
         return Z24Dataset(data)
 
-    def reshape(self, new_shape: tuple, inplace: bool = False):
+    def reshape_in_sequences(self, sequences_length: int, inplace: bool = False):
+        n_samples, sample_length = self.data.shape
+
+        sequence_samples_to_consider = (sample_length // sequences_length) * sequences_length
+        new_data = self.data[:, :sequence_samples_to_consider].reshape((-1, sequences_length))
+
         if inplace:
-            self.data.reshape(new_shape)
+            self.data = new_data
         else:
-            return Z24Dataset(self.data.reshape(new_shape))
+            return Z24Dataset(new_data)
 
     def get_torch_dataset(self) -> Dataset:
         return CustomTorchDataset(self.data)
