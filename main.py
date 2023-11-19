@@ -1,8 +1,10 @@
-import numpy as np
-import os
-from dotenv import load_dotenv
+from datetime import datetime
 
-load_dotenv('.env')
+from src.dataset.Z24Dataset import Z24Dataset
 
-print(os.environ['WORK_FOLDER'])
-print(np.__version__)
+first_date = datetime(1998, 2, 1)
+last_date = datetime(1998, 2, 2)
+sensor_number = 0
+
+data = Z24Dataset.load(first_date, last_date, sensor_number)
+print(data.data.shape)
