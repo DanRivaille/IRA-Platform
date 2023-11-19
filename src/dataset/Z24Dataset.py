@@ -13,7 +13,7 @@ DATA_FOLDER = '/work/ivan.santos/datasets/z24/mat_files'
 
 
 class Z24Dataset:
-    scaler = MinMaxScaler(feature_range=(-1, 1))
+    __scaler = MinMaxScaler(feature_range=(-1, 1))
 
     def __init__(self, data: np.ndarray):
         self.data = data
@@ -44,9 +44,9 @@ class Z24Dataset:
         data_to_transform = self.data.reshape((-1, 1))
 
         if is_train_data:
-            Z24Dataset.scaler.fit(data_to_transform)
+            Z24Dataset.__scaler.fit(data_to_transform)
 
-        data_normalized = Z24Dataset.scaler.transform(data_to_transform).reshape(original_shape)
+        data_normalized = Z24Dataset.__scaler.transform(data_to_transform).reshape(original_shape)
         if inplace:
             self.data = data_normalized
         else:
