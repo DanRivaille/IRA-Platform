@@ -45,6 +45,7 @@ pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
 PyJWT @ file:///opt/conda/conda-bld/pyjwt_1657544592787/work
 pyOpenSSL @ file:///croot/pyopenssl_1690223430423/work
 PySocks @ file:///home/builder/ci_310/pysocks_1640793678128/work
+python-dotenv==1.0.0
 requests @ file:///croot/requests_1690400202158/work
 requests-oauthlib==1.3.0
 rsa @ file:///tmp/build/80754af9/rsa_1614366226499/work
