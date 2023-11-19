@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 import numpy as np
 from scipy.io import savemat
 
+from src.Utils.utils import stack_arrays
+
 WORK_FOLDER = '/work/ivan.santos'
 SCRATCH_FOLDER = '/scratch/ivan.santos'
 
@@ -28,13 +30,6 @@ INITIAL_DATE = datetime(1997, 11, 8)
 def get_datetime(week_number: int, day_code: str, hour=0) -> datetime:
     day_offset = 7 * (week_number - 1) + day_map[day_code]
     return INITIAL_DATE + timedelta(days=day_offset, hours=hour)
-
-
-def stack_arrays(stacked_array: np.ndarray, new_array: np.ndarray) -> np.ndarray:
-    if stacked_array.shape[0] != 0:
-        return np.vstack((stacked_array, new_array))
-    else:
-        return new_array
 
 
 def extract_acceleration_from_zip(zip_file: ZipFile, data_filename_to_extract: str) -> np.ndarray:
@@ -120,7 +115,7 @@ def process_zip_files(week_list: Iterable[int], day_code_list: Iterable[str], ho
     return number_of_files_processed
 
 
-weeks = range(12, 23)
+weeks = range(39, 45)
 day_codes = day_map.keys()
 hours = range(24)
 
