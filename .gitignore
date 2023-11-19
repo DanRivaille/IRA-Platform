@@ -1,3 +1,6 @@
+# Project things
+*.png
+
 # IDEs
 .idea
 .DS_Store
