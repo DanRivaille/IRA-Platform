@@ -8,6 +8,8 @@ from sklearn.preprocessing import MinMaxScaler
 
 from src.dataset.CustomTorchDataset import CustomTorchDataset
 from src.utils.utils import stack_arrays
+from src.config.ConfigParams import ConfigParams
+from src.dataset.dataset_type import DatasetType
 
 DATA_FOLDER = '/work/ivan.santos/datasets/z24/mat_files'
 
@@ -15,11 +17,17 @@ DATA_FOLDER = '/work/ivan.santos/datasets/z24/mat_files'
 class Z24Dataset:
     __scaler = MinMaxScaler(feature_range=(-1, 1))
 
-    def __init__(self, data: np.ndarray):
+    def __init__(self, data: np.ndarray, type_dataset: DatasetType):
         self.data = data
+        self.type_dataset = type_dataset
 
     @staticmethod
-    def load(first_date: datetime, last_date: datetime, sensor_number: int):
+    def load(config: ConfigParams, type_dataset: DatasetType):
+        data_params = config.get_params_dict(type_dataset.value)
+        first_date = datetime.strptime(data_params.get('first_date'), "%d/%m/%Y")
+        last_date = datetime.strptime(data_params.get('last_date'), "%d/%m/%Y")
+        sensor_number = config.get_params_dict('preprocess_params').get('sensor_number')
+
         total_hours = (last_date - first_date + timedelta(days=1)) // timedelta(hours=1)
         year = str(first_date.year)
         data = np.empty(0)
@@ -37,20 +45,20 @@ class Z24Dataset:
 
                 data = stack_arrays(data, new_data)
 
-        return Z24Dataset(data)
+        return Z24Dataset(data, type_dataset)
 
-    def normalize_data(self, is_train_data: bool = True, inplace: bool = False):
+    def normalize_data(self, new_range: tuple, inplace: bool = False):
         original_shape = self.data.shape
-        data_to_transform = self.data.reshape((-1, 1))
+        data_to_transform = self.data.reshape(new_range)
 
-        if is_train_data:
+        if self.type_dataset == DatasetType.TRAIN_DATA:
             Z24Dataset.__scaler.fit(data_to_transform)
 
         data_normalized = Z24Dataset.__scaler.transform(data_to_transform).reshape(original_shape)
         if inplace:
             self.data = data_normalized
         else:
-            return Z24Dataset(data_normalized)
+            return Z24Dataset(data_normalized, self.type_dataset)
 
     def reshape_in_sequences(self, sequences_length: int, inplace: bool = False):
         n_samples, sample_length = self.data.shape

@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from src.dataset.Z24Dataset import Z24Dataset
 from src.config.ConfigParams import ConfigParams
 from src.algorithm.ml_model.TorchModel import TorchModel
+from src.dataset.dataset_type import DatasetType
 
 OUTPUT_FOLDER = '/home/ivan.santos/repositories/IRA-Platform/models_parameters'
 
@@ -20,25 +21,17 @@ config_filename = args.config
 model_identifier = args.id
 
 
-def load_ds(config: ConfigParams, param: str):
-    first_date_ = datetime.strptime(config.get_params_dict(param).get('first_date'), "%d/%m/%Y")
-    last_date_ = datetime.strptime(config.get_params_dict(param).get('last_date'), "%d/%m/%Y")
-    sensor_number_ = config.get_params_dict('preprocess_params').get('sensor_number')
-    dataset = Z24Dataset.load(first_date_, last_date_, sensor_number_)
-    return dataset
-
-
 config_params = ConfigParams.load('/home/ivan.santos/repositories/IRA-Platform/config_files/' + config_filename)
 
 sequences_length = config_params.get_params_dict('preprocess_params').get('sequences_length')
 
-train_dataset = load_ds(config_params, 'train_params')
-valid_dataset = load_ds(config_params, 'validation_params')
+train_dataset = Z24Dataset.load(config_params, DatasetType.TRAIN_DATA)
+valid_dataset = Z24Dataset.load(config_params, DatasetType.VALIDATION_DATA)
 
-train_dataset.normalize_data(is_train_data=True, inplace=True)
+train_dataset.normalize_data((-1, 1), inplace=True)
 train_dataset.reshape_in_sequences(sequences_length, inplace=True)
 
-valid_dataset.normalize_data(is_train_data=False, inplace=True)
+valid_dataset.normalize_data((-1, 1), inplace=True)
 valid_dataset.reshape_in_sequences(sequences_length, inplace=True)
 
 batch_size = config_params.get_params_dict('train_params')['batch_size']
