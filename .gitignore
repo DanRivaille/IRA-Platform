@@ -1,5 +1,6 @@
 # Project things
 *.png
+models_parameters/
 
 # IDEs
 .idea
