@@ -14,11 +14,11 @@ from src.dataset.dataset_type import DatasetType
 
 
 class Z24Dataset:
-    __scaler = MinMaxScaler(feature_range=(-1, 1))
+    __scaler: MinMaxScaler | None = None
 
     def __init__(self, data: np.ndarray, type_dataset: DatasetType):
-        self.data = data
-        self.type_dataset = type_dataset
+        self.data: np.ndarray = data
+        self.type_dataset: DatasetType = type_dataset
 
     @staticmethod
     def load(config: ConfigParams, type_dataset: DatasetType):
@@ -48,9 +48,10 @@ class Z24Dataset:
 
     def normalize_data(self, new_range: tuple, inplace: bool = False):
         original_shape = self.data.shape
-        data_to_transform = self.data.reshape(new_range)
+        data_to_transform = self.data.reshape((-1, 1))
 
         if self.type_dataset == DatasetType.TRAIN_DATA:
+            Z24Dataset.__scaler = MinMaxScaler(feature_range=new_range)
             Z24Dataset.__scaler.fit(data_to_transform)
 
         data_normalized = Z24Dataset.__scaler.transform(data_to_transform).reshape(original_shape)
