@@ -2,7 +2,7 @@ import os
 import argparse
 
 
-class Parser:
+class ParserArguments:
     def __init__(self):
         self.__parser = argparse.ArgumentParser()
         self.__create_arguments()
