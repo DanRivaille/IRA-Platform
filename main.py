@@ -16,6 +16,7 @@ def main():
     config_params = ConfigParams.load(os.path.join(CommonPath.CONFIG_FILES_FOLDER.value, args.config_filename))
 
     sequences_length = config_params.get_params_dict('preprocess_params').get('sequences_length')
+    batch_size = config_params.get_params_dict('train_params')['batch_size']
 
     # Data loading and preprocessing
     train_dataset = Z24Dataset.load(config_params, DatasetType.TRAIN_DATA)
@@ -27,7 +28,6 @@ def main():
     valid_dataset.normalize_data((-1, 1), inplace=True)
     valid_dataset.reshape_in_sequences(sequences_length, inplace=True)
 
-    batch_size = config_params.get_params_dict('train_params')['batch_size']
     train_loader = DataLoader(train_dataset.get_torch_dataset(), batch_size=batch_size)
     valid_loader = DataLoader(valid_dataset.get_torch_dataset(), batch_size=batch_size)
 
@@ -38,11 +38,12 @@ def main():
     history = model.train(config_params, train_loader, valid_loader)
 
     # Saving the results
-    output_model_folder = os.path.join(CommonPath.MODEL_PARAMETERS_FOLDER.value, model.idenfitier)
-    os.makedirs(output_model_folder, exist_ok=True)
+    if args.save:
+        output_model_folder = os.path.join(CommonPath.MODEL_PARAMETERS_FOLDER.value, model.idenfitier)
+        os.makedirs(output_model_folder, exist_ok=True)
 
-    history.save(output_model_folder)
-    model.save(config_params, output_model_folder)
+        history.save(output_model_folder)
+        model.save(config_params, output_model_folder)
 
 
 if __name__ == '__main__':

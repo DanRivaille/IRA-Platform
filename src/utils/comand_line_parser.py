@@ -1,3 +1,4 @@
+import os
 import argparse
 
 
@@ -8,8 +9,9 @@ class Parser:
         self.__args = self.__parser.parse_args()
 
     def __create_arguments(self):
-        self.__parser.add_argument("-i", "--id", help="Model identifier")
-        self.__parser.add_argument("-c", "--config", help="Configuration file")
+        self.__parser.add_argument("-i", "--id", help="Model identifier", required=True)
+        self.__parser.add_argument("-c", "--config", help="Configuration file", required=True)
+        self.__parser.add_argument("-s", "--save", help="Save the trained model and its results", default=False)
 
     @property
     def model_id(self):
@@ -17,4 +19,8 @@ class Parser:
 
     @property
     def config_filename(self):
-        return self.__args.config
+        return os.path.split(self.__args.config)[1]
+
+    @property
+    def save(self):
+        return self.__args.save
