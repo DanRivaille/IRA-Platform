@@ -1,5 +1,9 @@
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
+
+from src.config.CommonPath import CommonPath
 
 
 def plot_signal(signal: np.ndarray, size: tuple = (3, 15), save: bool = True, filename: str = "") -> None:
@@ -11,10 +15,7 @@ def plot_signal(signal: np.ndarray, size: tuple = (3, 15), save: bool = True, fi
     axs.set_xlabel("Time")
     axs.set_ylabel("Amplitude")
 
-    if save:
-        plt.savefig('/home/ivan.santos/repositories/IRA-Platform/' + filename, bbox_inches='tight')
-    else:
-        plt.show()
+    __save_or_show_plot(save, filename)
 
 
 def plot_training_curves(train_error: list,
@@ -29,9 +30,13 @@ def plot_training_curves(train_error: list,
     axs.plot(validation_error, label='Validation error')
     axs.set_xlabel("Epochs")
     axs.set_ylabel("Error (MSE)")
-
     plt.legend()
+
+    __save_or_show_plot(save, filename)
+
+
+def __save_or_show_plot(save: bool, filename: str):
     if save:
-        plt.savefig('/home/ivan.santos/repositories/IRA-Platform/' + filename, bbox_inches='tight')
+        plt.savefig(os.path.join(CommonPath.ROOT_FOLDER.value, filename), bbox_inches='tight')
     else:
         plt.show()

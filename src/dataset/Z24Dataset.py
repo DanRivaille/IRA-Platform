@@ -9,9 +9,8 @@ from sklearn.preprocessing import MinMaxScaler
 from src.dataset.CustomTorchDataset import CustomTorchDataset
 from src.utils.utils import stack_arrays
 from src.config.ConfigParams import ConfigParams
+from src.config.CommonPath import CommonPath
 from src.dataset.dataset_type import DatasetType
-
-DATA_FOLDER = '/work/ivan.santos/datasets/z24/mat_files'
 
 
 class Z24Dataset:
@@ -37,7 +36,7 @@ class Z24Dataset:
 
             foldername = f'{str(current_datetime.month).zfill(2)}{str(current_datetime.day).zfill(2)}'
             filename = f'd_{year[2:]}_{current_datetime.month}_{current_datetime.day}_{current_datetime.hour}.mat'
-            file_path = os.path.join(DATA_FOLDER, foldername, filename)
+            file_path = os.path.join(CommonPath.DATA_FOLDER.value, foldername, filename)
 
             if os.path.isfile(file_path):
                 data_mat = loadmat(file_path)
@@ -69,7 +68,7 @@ class Z24Dataset:
         if inplace:
             self.data = new_data
         else:
-            return Z24Dataset(new_data)
+            return Z24Dataset(new_data, self.type_dataset)
 
     def get_torch_dataset(self) -> Dataset:
         return CustomTorchDataset(self.data)
