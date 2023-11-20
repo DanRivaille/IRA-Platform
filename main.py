@@ -7,13 +7,13 @@ from src.config.ConfigParams import ConfigParams
 from src.config.CommonPath import CommonPath
 from src.algorithm.ml_model.TorchModel import TorchModel
 from src.dataset.dataset_type import DatasetType
-from src.utils.comand_line_parser import parse_comand_line_arguments
+from src.utils.comand_line_parser import Parser
 
 
 def main():
-    args = parse_comand_line_arguments()
-    config_filename = args.config
-    model_identifier = args.id
+    args = Parser()
+    config_filename = args.config_filename
+    model_identifier = args.model_id
 
     config_params = ConfigParams.load(os.path.join(CommonPath.CONFIG_FILES_FOLDER.value, config_filename))
 

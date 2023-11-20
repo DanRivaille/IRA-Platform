@@ -1,11 +1,20 @@
 import argparse
 
 
-def parse_comand_line_arguments():
-    parser = argparse.ArgumentParser()
+class Parser:
+    def __init__(self):
+        self.__parser = argparse.ArgumentParser()
+        self.__create_arguments()
+        self.__args = self.__parser.parse_args()
 
-    parser.add_argument("-i", "--id", help="Model identifier")
-    parser.add_argument("-c", "--config", help="Configuration file")
+    def __create_arguments(self):
+        self.__parser.add_argument("-i", "--id", help="Model identifier")
+        self.__parser.add_argument("-c", "--config", help="Configuration file")
 
-    args = parser.parse_args()
-    return args
+    @property
+    def model_id(self):
+        return self.__args.id
+
+    @property
+    def config_filename(self):
+        return self.__args.config
