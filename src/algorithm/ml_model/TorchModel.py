@@ -1,15 +1,20 @@
-from torch import no_grad, cuda
+import os
+
+from torch import no_grad, cuda, save
 from torch.optim import Adam
 from torch.nn import MSELoss
 from torch.utils.data import DataLoader
 
 from src.algorithm.ml_model.models.Autoencoder import Autoencoder
 from src.config.ConfigParams import ConfigParams
+from src.algorithm.ml_model.History import History
 
 
 class TorchModel:
 
-    def __init__(self, input_length: int, learning_rate: float):
+    def __init__(self, identifier: str, input_length: int, learning_rate: float):
+        self.idenfitier = identifier
+
         self.device = TorchModel.__get_device()
 
         self.model = Autoencoder(input_length)
@@ -31,19 +36,22 @@ class TorchModel:
         pass
 
     @staticmethod
-    def create(config: ConfigParams):
+    def create(config: ConfigParams, identifier: str):
+        id_model = f'{identifier}_cnf_{config.get_params_dict("id")}'
+
         sequences_length = config.get_params_dict('preprocess_params')['sequences_length']
         learning_rate = config.get_params_dict('train_params')['learning_rate']
-        return TorchModel(sequences_length, learning_rate)
+        return TorchModel(id_model, sequences_length, learning_rate)
 
-    def save(self, config: dict):
-        pass
+    def save(self, config: dict, folder: str):
+        save(self.model.state_dict(), os.path.join(folder, self.idenfitier + '.pth'))
 
-    def train(self, config: ConfigParams, trainloader: DataLoader, validationloader: DataLoader | None):
+    def train(self, config: ConfigParams, trainloader: DataLoader, validationloader: DataLoader | None) -> History:
         num_epochs = config.get_params_dict('train_params')['num_epochs']
 
         train_error = []
         validation_error = []
+        learning_rate_updating = []
 
         for epoch in range(num_epochs):
             loss = self.__run_epoch(trainloader)
@@ -56,7 +64,9 @@ class TorchModel:
             if (epoch % 5) == 0:
                 print(f'epoch [{epoch + 1}/{num_epochs}], loss:{loss.item(): .4f}')
 
-        return train_error, validation_error
+            learning_rate_updating.append(config.get_params_dict('train_params')['learning_rate'])
+
+        return History(train_error, validation_error, learning_rate_updating)
 
     def __run_epoch(self, dataloader: DataLoader, is_train=True):
         loss = None
