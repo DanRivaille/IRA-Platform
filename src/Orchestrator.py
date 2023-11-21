@@ -18,7 +18,7 @@ class Orchestrator:
                  preprocessing_steps: [PreprocessStep]):
         self.__config_params = config_params
         self.__model = model
-        self.__preprocessing_steps = preprocessing_steps
+        self.__preprocessing_steps: [PreprocessStep] = preprocessing_steps
 
         self.__train_dataset: IRADataset | None = None
         self.__test_dataset: IRADataset | None = None
@@ -26,17 +26,34 @@ class Orchestrator:
 
         self.__history: History | None = None
 
+        self.__model_folder: str = build_model_folderpath(self.__model.identifier,
+                                                          self.__config_params.get_params_dict('id'))
+
     def load_train_data(self, class_dataset: IRADataset.__class__):
         self.__train_dataset = class_dataset.load(self.__config_params, DatasetType.TRAIN_DATA)
         self.__valid_dataset = class_dataset.load(self.__config_params, DatasetType.VALIDATION_TRAIN_DATA)
 
-        for preprocess_step in self.__preprocessing_steps:
-            preprocess_step.apply(self.__train_dataset)
-            preprocess_step.apply(self.__valid_dataset)
+        self.__preprocess_data()
 
     def load_test_data(self, class_dataset: IRADataset.__class__):
         self.__test_dataset = class_dataset.load(self.__config_params, DatasetType.TEST_DATA)
-        pass
+        self.__valid_dataset = class_dataset.load(self.__config_params, DatasetType.VALIDATION_TEST_DATA)
+
+        for preprocess_step in self.__preprocessing_steps:
+            preprocess_step.load(self.__model_folder)
+
+        self.__preprocess_data()
+
+    def __preprocess_data(self):
+        for preprocess_step in self.__preprocessing_steps:
+            Orchestrator.__apply_preprocess_step(self.__train_dataset, preprocess_step)
+            Orchestrator.__apply_preprocess_step(self.__test_dataset, preprocess_step)
+            Orchestrator.__apply_preprocess_step(self.__valid_dataset, preprocess_step)
+
+    @staticmethod
+    def __apply_preprocess_step(dataset: IRADataset, preprocess_step: PreprocessStep):
+        if dataset is not None:
+            preprocess_step.apply(dataset)
 
     def train_model(self):
         batch_size = self.__config_params.get_params_dict('train_params')['batch_size']
@@ -51,15 +68,16 @@ class Orchestrator:
         pass
 
     def save_trained_model(self):
-        output_model_folder = build_model_folderpath(self.__model.identifier,
-                                                     self.__config_params.get_params_dict('id'))
-        os.makedirs(output_model_folder, exist_ok=True)
+        os.makedirs(self.__model_folder, exist_ok=True)
 
-        model_path = os.path.join(output_model_folder, 'model_trained' + self.__model.get_file_extension())
-        results_path = os.path.join(output_model_folder, 'history.json')
+        model_path = os.path.join(self.__model_folder, 'model_trained' + self.__model.get_file_extension())
+        results_path = os.path.join(self.__model_folder, 'history.json')
 
         self.__history.save(results_path)
         self.__model.save(self.__config_params, model_path)
+
+        for preprocess_step in self.__preprocessing_steps:
+            preprocess_step.save(self.__model_folder)
 
     def save_testing_results(self):
         print('Saving the results')

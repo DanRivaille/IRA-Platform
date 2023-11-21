@@ -8,6 +8,7 @@ from src.dataset.Z24Dataset import Z24Dataset
 from src.utils.ParserArguments import ParserArguments
 from src.dataset.preprocessing.Normalizer import Normalizer
 from src.dataset.preprocessing.SequenceSplitter import SequenceSplitter
+from src.utils.utils import build_model_folderpath
 
 
 def main():
@@ -24,18 +25,23 @@ def main():
     sequence_splitter = SequenceSplitter(sequences_length)
     preprocessing_steps = [normalizer, sequence_splitter]
 
-    # Model creation
-    model = TorchModel.create(config_params, args.model_id)
-
-    orchestrator = Orchestrator(config_params, model, preprocessing_steps)
-
     if not args.is_test:
+        # Model creation
+        model = TorchModel.create(config_params, args.model_id)
+
+        orchestrator = Orchestrator(config_params, model, preprocessing_steps)
         orchestrator.load_train_data(Z24Dataset)
         orchestrator.train_model()
 
         if args.save:
             orchestrator.save_trained_model()
     else:
+        # Model creation
+        model_folder = build_model_folderpath(args.model_id, config_params.get_params_dict('id'))
+        model_path = 'model_trained' + TorchModel.get_file_extension()
+        model = TorchModel.load(config_params, args.model_id, os.path.join(model_folder, model_path))
+
+        orchestrator = Orchestrator(config_params, model, preprocessing_steps)
         orchestrator.load_test_data(Z24Dataset)
         orchestrator.test_model()
 

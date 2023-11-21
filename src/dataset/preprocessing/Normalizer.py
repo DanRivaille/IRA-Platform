@@ -1,4 +1,7 @@
+import os.path
+
 from sklearn.preprocessing import MinMaxScaler
+import joblib
 
 from src.dataset.IRADataset import IRADataset
 from src.dataset.dataset_type import DatasetType
@@ -22,3 +25,15 @@ class Normalizer(PreprocessStep):
 
         normalized_data = Normalizer.__scaler.transform(data_to_transform).reshape(original_shape)
         dataset.data = normalized_data
+
+    def save(self, folder: str):
+        file_path = os.path.join(folder, Normalizer.get_filename())
+        joblib.dump(Normalizer.__scaler, file_path)
+
+    def load(self, folder: str):
+        file_path = os.path.join(folder, Normalizer.get_filename())
+        Normalizer.__scaler = joblib.load(file_path)
+
+    @staticmethod
+    def get_filename() -> str:
+        return 'normalizer.gz'

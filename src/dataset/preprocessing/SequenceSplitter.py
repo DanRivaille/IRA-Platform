@@ -12,3 +12,13 @@ class SequenceSplitter(PreprocessStep):
 
         sequences = dataset.data[:, :sequence_samples_to_consider].reshape((-1, self.__sequence_length))
         dataset.data = sequences
+
+    def save(self, folder: str):
+        pass
+
+    def load(self, folder: str):
+        pass
+
+    @staticmethod
+    def get_filename() -> str:
+        pass
