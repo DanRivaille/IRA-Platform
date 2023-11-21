@@ -39,6 +39,7 @@ def main():
 
     # Saving the results
     if args.save:
+
         output_model_folder = os.path.join(CommonPath.MODEL_PARAMETERS_FOLDER.value, model.idenfitier)
         os.makedirs(output_model_folder, exist_ok=True)
 
