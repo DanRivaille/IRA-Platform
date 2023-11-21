@@ -17,11 +17,13 @@ def main():
 
     config_params = ConfigParams.load(os.path.join(CommonPath.CONFIG_FILES_FOLDER.value, args.config_filename))
 
-    sequences_length = config_params.get_params_dict('preprocess_params').get('sequences_length')
+    preprocess_params = config_params.get_params_dict('preprocess_params')
+    sequences_length = preprocess_params.get('sequences_length')
+    data_range = (preprocess_params.get('range_lb'), preprocess_params.get('range_up'))
     batch_size = config_params.get_params_dict('train_params')['batch_size']
 
     # Data loading and preprocessing
-    normalizer = Normalizer((-1, 1))
+    normalizer = Normalizer(data_range)
     sequence_splitter = SequenceSplitter(sequences_length)
     preprocessing_steps = [normalizer, sequence_splitter]
 
@@ -43,7 +45,6 @@ def main():
 
     # Saving the results
     if args.save:
-
         output_model_folder = os.path.join(CommonPath.MODEL_PARAMETERS_FOLDER.value, model.idenfitier)
         os.makedirs(output_model_folder, exist_ok=True)
 
