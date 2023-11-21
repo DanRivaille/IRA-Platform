@@ -28,11 +28,19 @@ def main():
     model = TorchModel.create(config_params, args.model_id)
 
     orchestrator = Orchestrator(config_params, model, preprocessing_steps)
-    orchestrator.load_train_data(Z24Dataset)
-    orchestrator.train_model()
 
-    if args.save:
-        orchestrator.save_model()
+    if not args.is_test:
+        orchestrator.load_train_data(Z24Dataset)
+        orchestrator.train_model()
+
+        if args.save:
+            orchestrator.save_trained_model()
+    else:
+        orchestrator.load_test_data(Z24Dataset)
+        orchestrator.test_model()
+
+        if args.save:
+            orchestrator.save_testing_results()
 
 
 if __name__ == '__main__':

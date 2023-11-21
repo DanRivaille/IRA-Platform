@@ -1,4 +1,4 @@
-from torch import no_grad, cuda, save
+from torch import no_grad, cuda, save, load
 from torch.optim import Adam
 from torch.nn import MSELoss
 from torch.utils.data import DataLoader
@@ -35,8 +35,13 @@ class TorchModel(MLModel):
         return device
 
     @staticmethod
-    def load(config: ConfigParams, path: str):
-        pass
+    def load(config: ConfigParams, identifier: str, path: str):
+        torch_model = TorchModel.create(config, identifier)
+        torch_model.model.load_state_dict(load(path))
+        torch_model.model.eval()
+        torch_model.model.to(torch_model.device)
+
+        return torch_model
 
     @staticmethod
     def create(config: ConfigParams, identifier: str):
@@ -63,7 +68,7 @@ class TorchModel(MLModel):
                 validation_error.append(validation_loss.item())
 
             if (epoch % 5) == 0:
-                print(f'epoch [{epoch + 1}/{num_epochs}], loss:{loss.item(): .4f}')
+                print(f'epoch [{epoch + 1}/{num_epochs}], loss:{loss.item(): .7f}')
 
             learning_rate_updating.append(config.get_params_dict('train_params')['learning_rate'])
 

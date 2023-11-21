@@ -21,7 +21,7 @@ class Algorithm(ABC):
     """
     @staticmethod
     @abstractmethod
-    def load(config: ConfigParams, path: str):
+    def load(config: ConfigParams, identifier: str, path: str):
         pass
 
     """

@@ -17,7 +17,7 @@ class Z24Dataset(IRADataset):
 
     @staticmethod
     def load(config: ConfigParams, type_dataset: DatasetType):
-        data_params = config.get_params_dict(type_dataset.value)
+        data_params = config.get_params_dict('data_params').get(type_dataset.value)
         first_date = datetime.strptime(data_params.get('first_date'), "%d/%m/%Y")
         last_date = datetime.strptime(data_params.get('last_date'), "%d/%m/%Y")
         sensor_number = config.get_params_dict('preprocess_params').get('sensor_number')
