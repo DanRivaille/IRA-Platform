@@ -8,6 +8,8 @@ from src.config.CommonPath import CommonPath
 from src.algorithm.ml_model.TorchModel import TorchModel
 from src.dataset.dataset_type import DatasetType
 from src.utils.ParserArguments import ParserArguments
+from src.dataset.preprocessing.Normalizer import Normalizer
+from src.dataset.preprocessing.SequenceSplitter import SequenceSplitter
 
 
 def main():
@@ -19,14 +21,16 @@ def main():
     batch_size = config_params.get_params_dict('train_params')['batch_size']
 
     # Data loading and preprocessing
+    normalizer = Normalizer((-1, 1))
+    sequence_splitter = SequenceSplitter(sequences_length)
+    preprocessing_steps = [normalizer, sequence_splitter]
+
     train_dataset = Z24Dataset.load(config_params, DatasetType.TRAIN_DATA)
     valid_dataset = Z24Dataset.load(config_params, DatasetType.VALIDATION_DATA)
 
-    train_dataset.normalize_data((-1, 1), inplace=True)
-    train_dataset.reshape_in_sequences(sequences_length, inplace=True)
-
-    valid_dataset.normalize_data((-1, 1), inplace=True)
-    valid_dataset.reshape_in_sequences(sequences_length, inplace=True)
+    for preprocess_step in preprocessing_steps:
+        preprocess_step.apply(train_dataset)
+        preprocess_step.apply(valid_dataset)
 
     train_loader = DataLoader(train_dataset.get_torch_dataset(), batch_size=batch_size)
     valid_loader = DataLoader(valid_dataset.get_torch_dataset(), batch_size=batch_size)

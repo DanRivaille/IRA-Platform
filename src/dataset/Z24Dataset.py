@@ -6,6 +6,7 @@ import numpy as np
 from scipy.io import loadmat
 from sklearn.preprocessing import MinMaxScaler
 
+from src.dataset.IRADataset import IRADataset
 from src.dataset.CustomTorchDataset import CustomTorchDataset
 from src.utils.utils import stack_arrays
 from src.config.ConfigParams import ConfigParams
@@ -13,12 +14,11 @@ from src.config.CommonPath import CommonPath
 from src.dataset.dataset_type import DatasetType
 
 
-class Z24Dataset:
+class Z24Dataset(IRADataset):
     __scaler: MinMaxScaler | None = None
 
     def __init__(self, data: np.ndarray, type_dataset: DatasetType):
-        self.data: np.ndarray = data
-        self.type_dataset: DatasetType = type_dataset
+        super().__init__(data, type_dataset)
 
     @staticmethod
     def load(config: ConfigParams, type_dataset: DatasetType):

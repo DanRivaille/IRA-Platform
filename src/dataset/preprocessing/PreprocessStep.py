@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
-from src.dataset.dataset_type import DatasetType
+from src.dataset.IRADataset import IRADataset
 
 
 class PreprocessStep(ABC):
     @abstractmethod
-    def apply(self, data, data_type: DatasetType | None = None):
+    def apply(self, dataset: IRADataset):
         pass
 
