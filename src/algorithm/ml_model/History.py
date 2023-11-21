@@ -1,4 +1,3 @@
-import os
 from json import dump
 
 
@@ -17,6 +16,6 @@ class History:
 
         return entries
 
-    def save(self, folder: str):
-        with open(os.path.join(folder, 'history.json'), 'w') as history_file:
+    def save(self, path: str):
+        with open(path, 'w') as history_file:
             dump(self.to_json(), history_file)

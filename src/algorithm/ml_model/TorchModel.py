@@ -43,8 +43,8 @@ class TorchModel:
         learning_rate = config.get_params_dict('train_params')['learning_rate']
         return TorchModel(id_model, sequences_length, learning_rate)
 
-    def save(self, config: dict, folder: str):
-        save(self.model.state_dict(), os.path.join(folder, self.idenfitier + '.pth'))
+    def save(self, config: dict, path: str):
+        save(self.model.state_dict(), path)
 
     def train(self, config: ConfigParams, trainloader: DataLoader, validationloader: DataLoader | None) -> History:
         num_epochs = config.get_params_dict('train_params')['num_epochs']

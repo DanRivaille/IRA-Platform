@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 from torch.utils.data import Dataset
 import numpy as np
 from scipy.io import loadmat
-from sklearn.preprocessing import MinMaxScaler
 
 from src.dataset.IRADataset import IRADataset
 from src.dataset.CustomTorchDataset import CustomTorchDataset
@@ -15,8 +14,6 @@ from src.dataset.dataset_type import DatasetType
 
 
 class Z24Dataset(IRADataset):
-    __scaler: MinMaxScaler | None = None
-
     def __init__(self, data: np.ndarray, type_dataset: DatasetType):
         super().__init__(data, type_dataset)
 
@@ -45,31 +42,6 @@ class Z24Dataset(IRADataset):
                 data = stack_arrays(data, new_data)
 
         return Z24Dataset(data, type_dataset)
-
-    def normalize_data(self, new_range: tuple, inplace: bool = False):
-        original_shape = self.data.shape
-        data_to_transform = self.data.reshape((-1, 1))
-
-        if self.type_dataset == DatasetType.TRAIN_DATA:
-            Z24Dataset.__scaler = MinMaxScaler(feature_range=new_range)
-            Z24Dataset.__scaler.fit(data_to_transform)
-
-        data_normalized = Z24Dataset.__scaler.transform(data_to_transform).reshape(original_shape)
-        if inplace:
-            self.data = data_normalized
-        else:
-            return Z24Dataset(data_normalized, self.type_dataset)
-
-    def reshape_in_sequences(self, sequences_length: int, inplace: bool = False):
-        n_samples, sample_length = self.data.shape
-
-        sequence_samples_to_consider = (sample_length // sequences_length) * sequences_length
-        new_data = self.data[:, :sequence_samples_to_consider].reshape((-1, sequences_length))
-
-        if inplace:
-            self.data = new_data
-        else:
-            return Z24Dataset(new_data, self.type_dataset)
 
     def get_torch_dataset(self) -> Dataset:
         return CustomTorchDataset(self.data)
