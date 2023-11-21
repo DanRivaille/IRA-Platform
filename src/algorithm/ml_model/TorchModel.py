@@ -1,19 +1,18 @@
-import os
-
 from torch import no_grad, cuda, save
 from torch.optim import Adam
 from torch.nn import MSELoss
 from torch.utils.data import DataLoader
 
+from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.models.Autoencoder import Autoencoder
 from src.config.ConfigParams import ConfigParams
 from src.algorithm.ml_model.History import History
 
 
-class TorchModel:
+class TorchModel(MLModel):
 
     def __init__(self, identifier: str, input_length: int, learning_rate: float):
-        self.idenfitier = identifier
+        super().__init__(identifier)
 
         self.device = TorchModel.__get_device()
 
