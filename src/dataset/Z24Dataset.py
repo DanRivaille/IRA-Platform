@@ -1,12 +1,10 @@
 import os
 from datetime import datetime, timedelta
 
-from torch.utils.data import Dataset
 import numpy as np
 from scipy.io import loadmat
 
 from src.dataset.IRADataset import IRADataset
-from src.dataset.CustomTorchDataset import CustomTorchDataset
 from src.utils.utils import stack_arrays
 from src.config.ConfigParams import ConfigParams
 from src.config.CommonPath import CommonPath
@@ -42,6 +40,3 @@ class Z24Dataset(IRADataset):
                 data = stack_arrays(data, new_data)
 
         return Z24Dataset(data, type_dataset)
-
-    def get_torch_dataset(self) -> Dataset:
-        return CustomTorchDataset(self.data)

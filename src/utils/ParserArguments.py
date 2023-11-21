@@ -11,7 +11,8 @@ class ParserArguments:
     def __create_arguments(self):
         self.__parser.add_argument("-i", "--id", help="Model identifier", required=True)
         self.__parser.add_argument("-c", "--config", help="Configuration file", required=True)
-        self.__parser.add_argument("-s", "--save", help="Save the trained model and its results", default=False)
+        self.__parser.add_argument("-s", "--save", help="Save the trained model and its results", default=False,
+                                   action='store_true')
 
     @property
     def model_id(self) -> str:

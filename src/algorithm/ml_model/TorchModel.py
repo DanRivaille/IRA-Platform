@@ -24,6 +24,10 @@ class TorchModel:
         self.optimizer = Adam(self.model.parameters(), lr=learning_rate)
 
     @staticmethod
+    def get_file_extension():
+        return '.pth'
+
+    @staticmethod
     def __get_device():
         if cuda.is_available():
             device = 'cuda:0'
@@ -32,18 +36,16 @@ class TorchModel:
         return device
 
     @staticmethod
-    def load(config: dict):
+    def load(config: ConfigParams, path: str):
         pass
 
     @staticmethod
     def create(config: ConfigParams, identifier: str):
-        id_model = f'{identifier}_cnf_{config.get_params_dict("id")}'
-
         sequences_length = config.get_params_dict('preprocess_params')['sequences_length']
         learning_rate = config.get_params_dict('train_params')['learning_rate']
-        return TorchModel(id_model, sequences_length, learning_rate)
+        return TorchModel(identifier, sequences_length, learning_rate)
 
-    def save(self, config: dict, path: str):
+    def save(self, config: ConfigParams, path: str):
         save(self.model.state_dict(), path)
 
     def train(self, config: ConfigParams, trainloader: DataLoader, validationloader: DataLoader | None) -> History:
