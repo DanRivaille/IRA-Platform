@@ -4,17 +4,19 @@ from torch.utils.data import DataLoader
 
 from src.algorithm.ml_model.History import History
 from src.algorithm.ml_model.MLModel import MLModel
+from src.algorithm.ml_model.TorchModel import TorchModel
 from src.config.CommonPath import CommonPath
 from src.config.ConfigParams import ConfigParams
 from src.dataset.IRADataset import IRADataset
 from src.dataset.dataset_type import DatasetType
 from src.dataset.preprocessing.PreprocessStep import PreprocessStep
+from src.utils.AnomalyDetector import AnomalyDetector
 from src.utils.utils import build_model_folderpath
 
 
 class Orchestrator:
     def __init__(self, config_params: ConfigParams,
-                 model: MLModel,
+                 model: TorchModel,
                  preprocessing_steps: [PreprocessStep]):
         self.__config_params = config_params
         self.__model = model
@@ -67,7 +69,9 @@ class Orchestrator:
         batch_size = self.__config_params.get_params_dict('train_params')['batch_size']
         test_loader = DataLoader(self.__test_dataset.get_torch_dataset(), batch_size=batch_size)
         valid_loader = DataLoader(self.__valid_dataset.get_torch_dataset(), batch_size=batch_size)
-        self.__model.test(self.__config_params, test_loader, valid_loader)
+
+        anomaly_detector = AnomalyDetector(self.__model, self.__config_params)
+        anomaly_detector.detect_damage(test_loader, valid_loader)
 
     def save_trained_model(self):
         os.makedirs(self.__model_folder, exist_ok=True)
