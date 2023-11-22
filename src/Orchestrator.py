@@ -2,6 +2,7 @@ import os
 
 from torch.utils.data import DataLoader
 
+from src.algorithm.Results import Results
 from src.algorithm.ml_model.History import History
 from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.TorchModel import TorchModel
@@ -18,6 +19,7 @@ class Orchestrator:
     def __init__(self, config_params: ConfigParams,
                  model: TorchModel,
                  preprocessing_steps: [PreprocessStep]):
+        self.results: Results | None = None
         self.__config_params = config_params
         self.__model = model
         self.__preprocessing_steps: [PreprocessStep] = preprocessing_steps
@@ -71,7 +73,10 @@ class Orchestrator:
         valid_loader = DataLoader(self.__valid_dataset.get_torch_dataset(), batch_size=batch_size)
 
         anomaly_detector = AnomalyDetector(self.__model, self.__config_params)
-        anomaly_detector.detect_damage(test_loader, valid_loader)
+        self.results = anomaly_detector.detect_damage(test_loader, valid_loader)
+
+        results_path = os.path.join(self.__model_folder, 'results.json')
+        self.results.save(results_path)
 
     def save_trained_model(self):
         os.makedirs(self.__model_folder, exist_ok=True)

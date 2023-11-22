@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.metrics import f1_score, roc_auc_score
 from torch.utils.data import DataLoader
 
+from src.algorithm.Results import Results
 from src.algorithm.ml_model.TorchModel import TorchModel
 from src.config.ConfigParams import ConfigParams
 
@@ -15,11 +16,14 @@ class AnomalyDetector:
 
         self.__macroseq_length: int = config.get_params_dict('test_params')['macroseq_length']
 
-    def detect_damage(self, damaged_dataloader: DataLoader, healthy_dataloader: DataLoader):
+    def detect_damage(self, damaged_dataloader: DataLoader, healthy_dataloader: DataLoader) -> Results:
         features_damaged = self.__trained_model.run_test_epoch(damaged_dataloader)
         features_healthy = self.__trained_model.run_test_epoch(healthy_dataloader)
 
-        feature_threshold, macroseq_threshold = self.__find_best_thresholds(features_damaged, features_healthy)
+        feature_threshold, macroseq_threshold, max_f1, max_auc = self.__find_best_thresholds(features_damaged,
+                                                                                             features_healthy)
+
+        return Results(feature_threshold, macroseq_threshold, max_f1, max_auc, features_damaged, features_healthy)
 
     def __detect_damage(self, feature_vector: np.ndarray, feature_threshold: float,
                         macroseq_threshold: float):
@@ -45,8 +49,8 @@ class AnomalyDetector:
         return (feature_vector > threshold).astype(int)
 
     def __find_best_thresholds(self, feature_test_vector: np.ndarray, feature_valid_vector: np.ndarray) -> tuple:
-        feature_threshold_list = np.linspace(0.0001, 0.05, 10)
-        macroseq_threshold_list = np.linspace(0.3, 0.6, 10)
+        feature_threshold_list = np.linspace(0.0001, 0.005, 10)
+        macroseq_threshold_list = np.linspace(0.4, 0.6, 10)
 
         max_auc = -1
         max_f1 = -1.0
@@ -72,4 +76,4 @@ class AnomalyDetector:
                     best_m_t = m_t
 
         print(f'Best values: F_t: {best_f_t} - M_t: {best_m_t} - Max AUC score: {max_auc} - Max F1 score: {max_f1}')
-        return best_f_t, best_m_t
+        return best_f_t, best_m_t, max_f1, max_auc
