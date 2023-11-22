@@ -64,8 +64,10 @@ class Orchestrator:
         self.__history = self.__model.train(self.__config_params, train_loader, valid_loader)
 
     def test_model(self):
-        print('Testing the model')
-        pass
+        batch_size = self.__config_params.get_params_dict('train_params')['batch_size']
+        test_loader = DataLoader(self.__test_dataset.get_torch_dataset(), batch_size=batch_size)
+        valid_loader = DataLoader(self.__valid_dataset.get_torch_dataset(), batch_size=batch_size)
+        self.__model.test(self.__config_params, test_loader, valid_loader)
 
     def save_trained_model(self):
         os.makedirs(self.__model_folder, exist_ok=True)

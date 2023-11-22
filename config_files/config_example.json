@@ -11,7 +11,9 @@
     "learning_rate": 1e-3,
     "num_epochs": 10
   },
-  "test_params": {},
+  "test_params": {
+    "macroseq_length": 60
+  },
   "data_params": {
     "train_data" : {
       "first_date": "01/02/1998",

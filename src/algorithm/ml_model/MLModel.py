@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Dataset
 
 from src.algorithm.Algorithm import Algorithm
 from src.algorithm.ml_model.History import History
@@ -31,5 +31,5 @@ class MLModel(Algorithm, ABC):
     Runs the test process
     """
     @abstractmethod
-    def test(self, config: dict):
+    def test(self, config: ConfigParams, testloader: DataLoader, validationloader: DataLoader):
         pass
