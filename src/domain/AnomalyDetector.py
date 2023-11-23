@@ -3,13 +3,13 @@ from sklearn.metrics import f1_score, roc_auc_score
 from torch.utils.data import DataLoader
 
 from src.algorithm.Results import Results
-from src.algorithm.ml_model.TorchModel import TorchModel
+from src.algorithm.ml_model.MLModel import MLModel
 from src.config.ConfigParams import ConfigParams
 
 
 class AnomalyDetector:
     def __init__(self,
-                 model: TorchModel,
+                 model: MLModel,
                  config: ConfigParams):
         self.__trained_model = model
         self.__config = config
