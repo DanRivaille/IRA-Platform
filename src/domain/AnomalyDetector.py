@@ -17,8 +17,10 @@ class AnomalyDetector:
         self.__macroseq_length: int = config.get_params_dict('test_params')['macroseq_length']
 
     def detect_damage(self, damaged_dataloader: DataLoader, healthy_dataloader: DataLoader) -> Results:
-        features_damaged = self.__trained_model.run_test_epoch(damaged_dataloader)
-        features_healthy = self.__trained_model.run_test_epoch(healthy_dataloader)
+        _, features_damaged = self.__trained_model.predict(damaged_dataloader, is_train_data=False,
+                                                           criterion_reduction='none')
+        _, features_healthy = self.__trained_model.predict(healthy_dataloader, is_train_data=False,
+                                                           criterion_reduction='none')
 
         feature_threshold, macroseq_threshold, max_f1, max_auc = self.__find_best_thresholds(features_damaged,
                                                                                              features_healthy)

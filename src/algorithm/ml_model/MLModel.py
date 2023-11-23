@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+import numpy as np
 from torch.utils.data import DataLoader
 
 from src.algorithm.Algorithm import Algorithm
@@ -32,4 +33,12 @@ class MLModel(Algorithm, ABC):
     """
     @abstractmethod
     def test(self, config: ConfigParams, testloader: DataLoader, validationloader: DataLoader):
+        pass
+
+    """
+    Predict the data in dataloader using the current state of the model
+    @return Tuple: (predictions, errors per sample)
+    """
+    @abstractmethod
+    def predict(self, dataloader: DataLoader, **kwargs) -> tuple:
         pass

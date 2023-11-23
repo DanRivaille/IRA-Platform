@@ -1,5 +1,5 @@
 import numpy as np
-from torch import no_grad, cuda, save, load
+from torch import no_grad, cuda, save, load, enable_grad
 from torch.nn import MSELoss
 from torch.optim import Adam
 from torch.utils.data import DataLoader
@@ -21,8 +21,7 @@ class TorchModel(MLModel):
         self.model = Autoencoder(input_length)
         self.model.to(self.device)
 
-        self.criterion_train = MSELoss()
-        self.criterion_test = MSELoss(reduction='none')
+        self.criterion = MSELoss
         self.optimizer = Adam(self.model.parameters(), lr=learning_rate)
 
     @staticmethod
@@ -63,11 +62,11 @@ class TorchModel(MLModel):
         learning_rate_updating = []
 
         for epoch in range(num_epochs):
-            loss = self.run_epoch(trainloader)
+            _, loss = self.predict(trainloader, is_train_data=True, criterion_reduction='mean')
             train_error.append(loss)
 
             if validationloader is not None:
-                validation_loss = self.run_epoch(validationloader, is_train=False)
+                _, validation_loss = self.predict(trainloader, is_train_data=False, criterion_reduction='mean')
                 validation_error.append(validation_loss)
 
             if (epoch % 5) == 0:
@@ -78,38 +77,44 @@ class TorchModel(MLModel):
         Plotter.plot_training_curves(train_error, validation_error,
                                      filename="/home/ivan.santos/repositories/IRA-Platform/train.png")
 
-        train_error_per_sample = self.run_test_epoch(trainloader)
+        _, train_error_per_sample = self.predict(trainloader, is_train_data=False, criterion_reduction='none')
         return History(train_error, validation_error, learning_rate_updating, train_error_per_sample)
-
-    def run_epoch(self, dataloader: DataLoader, is_train=True) -> float:
-        loss = None
-
-        for trainbatch in dataloader:
-            batch = trainbatch.to(self.device)
-
-            output = self.model(batch)
-            loss = self.criterion_train(output, batch.data)
-
-            if is_train:
-                self.optimizer.zero_grad()
-                loss.backward()
-                self.optimizer.step()
-
-        return loss.item()
 
     # TODO: Check this function
     def test(self, config: ConfigParams, testloader: DataLoader, validationloader: DataLoader):
         pass
 
-    def run_test_epoch(self, dataloader: DataLoader) -> np.ndarray:
-        feature_vector = []
+    """
+    Predict the data in dataloader using the current state of the model
+    @param is_train_data If it is True, process the data with the gradient enable and compute one step of the optimizer
+    @param criterion_reduction ('mean', 'none'). 'mean' return the loss mean of the batch. 'none' return the loss for
+    each sample.
+    @return Tuple: (predictions, errors)
+    """
+    def predict(self, dataloader: DataLoader, is_train_data: bool = False, criterion_reduction: str = 'mean') -> tuple:
+        losses = []
+        criterion = self.criterion(reduction=criterion_reduction)
 
-        with no_grad():
+        gradient = enable_grad if is_train_data else no_grad
+
+        with gradient():
             for databatch in dataloader:
-                signals = databatch.to(self.device)
-                output = self.model(signals)
+                batch = databatch.to(self.device)
+                output = self.model(batch)
 
-                current_feature_value = np.mean(self.criterion_test(output, signals.data).cpu().numpy(), axis=1)
-                feature_vector.append(current_feature_value)
+                if 'none' == criterion_reduction:
+                    current_batch_loss = np.mean(criterion(output, batch.data).cpu().numpy(), axis=1)
+                else:
+                    current_batch_loss = criterion(output, batch.data)
 
-        return np.concatenate(feature_vector).flatten()
+                losses.append(current_batch_loss)
+
+                if is_train_data:
+                    self.optimizer.zero_grad()
+                    losses[-1].backward()
+                    self.optimizer.step()
+
+        if 'none' == criterion_reduction:
+            return None, np.concatenate(losses).flatten()
+        else:
+            return None, losses[-1].item()
