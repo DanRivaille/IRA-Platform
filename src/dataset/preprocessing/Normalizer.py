@@ -1,7 +1,7 @@
 import os.path
 
-from sklearn.preprocessing import MinMaxScaler
 import joblib
+from sklearn.preprocessing import MinMaxScaler
 
 from src.dataset.IRADataset import IRADataset
 from src.dataset.dataset_type import DatasetType

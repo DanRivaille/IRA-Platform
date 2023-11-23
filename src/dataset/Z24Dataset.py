@@ -4,11 +4,11 @@ from datetime import datetime, timedelta
 import numpy as np
 from scipy.io import loadmat
 
-from src.dataset.IRADataset import IRADataset
-from src.utils.utils import stack_arrays
-from src.config.ConfigParams import ConfigParams
 from src.config.CommonPath import CommonPath
+from src.config.ConfigParams import ConfigParams
+from src.dataset.IRADataset import IRADataset
 from src.dataset.dataset_type import DatasetType
+from src.utils.utils import stack_arrays
 
 
 class Z24Dataset(IRADataset):

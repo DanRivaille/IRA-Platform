@@ -1,6 +1,6 @@
-from torch.utils.data import Dataset
-from torch import from_numpy, float32, dtype, Tensor
 import numpy as np
+from torch import from_numpy, float32, dtype, Tensor
+from torch.utils.data import Dataset
 
 
 class CustomTorchDataset(Dataset):

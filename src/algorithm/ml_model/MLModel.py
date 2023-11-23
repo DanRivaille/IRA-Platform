@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from torch.utils.data import DataLoader, Dataset
+from torch.utils.data import DataLoader
 
 from src.algorithm.Algorithm import Algorithm
 from src.algorithm.ml_model.History import History

@@ -1,13 +1,13 @@
 import numpy as np
 from torch import no_grad, cuda, save, load
-from torch.optim import Adam
 from torch.nn import MSELoss
+from torch.optim import Adam
 from torch.utils.data import DataLoader
 
+from src.algorithm.ml_model.History import History
 from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.models.Autoencoder import Autoencoder
 from src.config.ConfigParams import ConfigParams
-from src.algorithm.ml_model.History import History
 from src.utils.Plotter import Plotter
 
 

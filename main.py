@@ -1,14 +1,13 @@
 import os
 
 from src.Orchestrator import Orchestrator
-from src.config.ConfigParams import ConfigParams
-from src.config.CommonPath import CommonPath
 from src.algorithm.ml_model.TorchModel import TorchModel
+from src.config.CommonPath import CommonPath
+from src.config.ConfigParams import ConfigParams
 from src.dataset.Z24Dataset import Z24Dataset
 from src.dataset.preprocessing.SequenceNormalizer import SequenceNormalizer
-from src.utils.ParserArguments import ParserArguments
-from src.dataset.preprocessing.Normalizer import Normalizer
 from src.dataset.preprocessing.SequenceSplitter import SequenceSplitter
+from src.utils.ParserArguments import ParserArguments
 from src.utils.utils import build_model_folderpath
 
 

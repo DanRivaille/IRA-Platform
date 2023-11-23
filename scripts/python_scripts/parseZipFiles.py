@@ -1,7 +1,7 @@
 import os
 from collections.abc import Iterable
-from zipfile import ZipFile
 from datetime import datetime, timedelta
+from zipfile import ZipFile
 
 import numpy as np
 from scipy.io import savemat

@@ -4,8 +4,8 @@ import numpy as np
 from torch.utils.data import Dataset
 
 from src.config.ConfigParams import ConfigParams
-from src.dataset.dataset_type import DatasetType
 from src.dataset.CustomTorchDataset import CustomTorchDataset
+from src.dataset.dataset_type import DatasetType
 
 
 class IRADataset(ABC):
