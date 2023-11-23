@@ -9,6 +9,7 @@ from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.models.Autoencoder import Autoencoder
 from src.config.ConfigParams import ConfigParams
 from src.algorithm.ml_model.History import History
+from src.utils.plot_functions import plot_training_curves
 
 
 class TorchModel(MLModel):
@@ -75,7 +76,11 @@ class TorchModel(MLModel):
 
             learning_rate_updating.append(config.get_params_dict('train_params')['learning_rate'])
 
-        return History(train_error, validation_error, learning_rate_updating)
+        plot_training_curves(train_error, validation_error,
+                             filename="/home/ivan.santos/repositories/IRA-Platform/train.png")
+
+        train_error_per_sample = self.run_test_epoch(trainloader)
+        return History(train_error, validation_error, learning_rate_updating, train_error_per_sample)
 
     def run_epoch(self, dataloader: DataLoader, is_train=True) -> float:
         loss = None

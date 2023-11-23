@@ -5,6 +5,7 @@ from src.config.ConfigParams import ConfigParams
 from src.config.CommonPath import CommonPath
 from src.algorithm.ml_model.TorchModel import TorchModel
 from src.dataset.Z24Dataset import Z24Dataset
+from src.dataset.preprocessing.SequenceNormalizer import SequenceNormalizer
 from src.utils.ParserArguments import ParserArguments
 from src.dataset.preprocessing.Normalizer import Normalizer
 from src.dataset.preprocessing.SequenceSplitter import SequenceSplitter
@@ -21,9 +22,11 @@ def main():
     data_range = (preprocess_params.get('range_lb'), preprocess_params.get('range_up'))
 
     # Data loading and preprocessing
-    normalizer = Normalizer(data_range)
+    #normalizer = Normalizer(data_range)
     sequence_splitter = SequenceSplitter(sequences_length)
-    preprocessing_steps = [normalizer, sequence_splitter]
+    sequence_normalizer = SequenceNormalizer(data_range)
+    preprocessing_steps = [sequence_splitter, sequence_normalizer]
+    #preprocessing_steps = [normalizer, sequence_splitter]
 
     if not args.is_test:
         # Model creation

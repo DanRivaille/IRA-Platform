@@ -49,7 +49,9 @@ class AnomalyDetector:
         return (feature_vector > threshold).astype(int)
 
     def __find_best_thresholds(self, feature_test_vector: np.ndarray, feature_valid_vector: np.ndarray) -> tuple:
-        feature_threshold_list = np.linspace(0.0001, 0.005, 10)
+        test_params = self.__config.get_params_dict('test_params')
+        feature_threshold_list = np.linspace(test_params['min_feature_threshold'], test_params['max_feature_threshold'],
+                                             test_params['number_feature_thresholds_to_try'])
         macroseq_threshold_list = np.linspace(0.4, 0.6, 10)
 
         max_auc = -1
