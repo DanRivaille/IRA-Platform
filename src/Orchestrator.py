@@ -1,20 +1,16 @@
 import os
 
-import numpy as np
 from torch.utils.data import DataLoader
 
 from src.algorithm.Results import Results
 from src.algorithm.ml_model.History import History
-from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.TorchModel import TorchModel
-from src.config.CommonPath import CommonPath
 from src.config.ConfigParams import ConfigParams
 from src.dataset.IRADataset import IRADataset
 from src.dataset.dataset_type import DatasetType
 from src.dataset.preprocessing.PreprocessStep import PreprocessStep
-from src.utils.AnomalyDetector import AnomalyDetector
+from src.domain.AnomalyDetector import AnomalyDetector
 from src.utils.utils import build_model_folderpath
-from src.utils.plot_functions import plot_signal
 
 
 class Orchestrator:

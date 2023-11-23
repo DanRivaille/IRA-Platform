@@ -3,13 +3,12 @@ from torch import no_grad, cuda, save, load
 from torch.optim import Adam
 from torch.nn import MSELoss
 from torch.utils.data import DataLoader
-from sklearn.metrics import roc_auc_score, f1_score
 
 from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.models.Autoencoder import Autoencoder
 from src.config.ConfigParams import ConfigParams
 from src.algorithm.ml_model.History import History
-from src.utils.plot_functions import plot_training_curves
+from src.utils.Plotter import Plotter
 
 
 class TorchModel(MLModel):
@@ -76,8 +75,8 @@ class TorchModel(MLModel):
 
             learning_rate_updating.append(config.get_params_dict('train_params')['learning_rate'])
 
-        plot_training_curves(train_error, validation_error,
-                             filename="/home/ivan.santos/repositories/IRA-Platform/train.png")
+        Plotter.plot_training_curves(train_error, validation_error,
+                                     filename="/home/ivan.santos/repositories/IRA-Platform/train.png")
 
         train_error_per_sample = self.run_test_epoch(trainloader)
         return History(train_error, validation_error, learning_rate_updating, train_error_per_sample)
