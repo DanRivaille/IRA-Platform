@@ -1,21 +1,44 @@
 from keras import Model, Sequential
 from keras.src.layers import Dense, LSTM, RepeatVector, TimeDistributed
+from keras.optimizers import Adam
 
 from src.config.ConfigParams import ConfigParams
 
 
 class KerasLoader:
     def __init__(self, config_params: ConfigParams):
-        self.__config: config_params = config_params
-        self.__topology: [dict] = self.__config.get_params_dict('network_params').get('topology')
+        self.config_params = config_params
 
     def load(self) -> Model:
+        topology = self.config_params.get_params_dict('network_params').get('topology')
+
         model = Sequential()
 
-        for layer in self.__topology:
+        for layer in topology:
             model.add(KerasLoader.__load_layer(layer))
 
+        compilation_params = KerasLoader.__load_compilation_params(self.config_params)
+        #model.compile(**compilation_params)
+        model.compile(optimizer=Adam(learning_rate=1e-3), loss='mean_squared_error')
+
         return model
+
+    @staticmethod
+    def __load_compilation_params(config_params: ConfigParams) -> dict:
+        network_params = config_params.get_params_dict('network_params')
+        optimizer = KerasLoader.__get_optimizer(network_params.get('optimizer'))
+        learning_rate = config_params.get_params_dict('train_params')['learning_rate']
+
+        print(network_params.get('loss_function'))
+        return {
+            'optimizer': optimizer(learning_rate=learning_rate),
+            'loss': network_params.get('loss_function')
+        }
+
+    @staticmethod
+    def __get_optimizer(optimizer_code: str):
+        if "adam" == optimizer_code:
+            return Adam
 
     @staticmethod
     def __load_layer(layer_info: dict):
@@ -45,7 +68,7 @@ class KerasLoader:
         layer_params = {}
 
         KerasLoader.__add_layer_param(layer_info, layer_params, 'input_shape')
-        KerasLoader.__add_layer_param(layer_info, layer_params, 'activation_function')
+        KerasLoader.__add_layer_param(layer_info, layer_params, 'activation')
         KerasLoader.__add_layer_param(layer_info, layer_params, 'return_sequences')
 
         return layer_params

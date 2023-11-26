@@ -2,10 +2,7 @@ from keras import Sequential, Model
 from keras.layers import Dense
 
 
-def get_autoencoder_keras(input_size: int, optimizer, loss_function, metric_list=None) -> Model:
-    if metric_list is None:
-        metric_list = []
-
+def get_autoencoder_keras(input_size: int, optimizer, loss_function) -> Model:
     encoding_dim = 128
     model = Sequential()
 
@@ -19,7 +16,7 @@ def get_autoencoder_keras(input_size: int, optimizer, loss_function, metric_list
     # Output layer
     model.add(Dense(input_size, activation='sigmoid'))
 
-    model.compile(optimizer=optimizer, loss=loss_function, metrics=metric_list)
+    model.compile(optimizer=optimizer, loss=loss_function)
     return model
 
 

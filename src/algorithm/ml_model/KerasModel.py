@@ -10,16 +10,17 @@ from keras.callbacks import ReduceLROnPlateau
 from src.algorithm.ml_model.History import History
 from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.ModelType import ModelType
+from src.algorithm.ml_model.architecture_loader.KerasLoader import KerasLoader
 from src.algorithm.ml_model.models.AEKeras import get_autoencoder_keras
 from src.config.ConfigParams import ConfigParams
 
 
 class KerasModel(MLModel):
-    def __init__(self, identifier, input_length: int, learning_rate: float):
+    def __init__(self,
+                 identifier: str,
+                 learning_rate: float,
+                 model_loader: KerasLoader):
         super().__init__(identifier)
-
-        self.__optimizer = Adam(learning_rate=learning_rate)
-        self.__loss_function = mean_squared_error
         self.__device = KerasModel.__get_device()
 
         self.__reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.9,
@@ -28,7 +29,9 @@ class KerasModel(MLModel):
 
         # instanciate a keras model
         with device(self.__device):
-            self.model: Model = get_autoencoder_keras(input_length, self.__optimizer, self.__loss_function)
+            self.model: Model = model_loader.load()
+            #self.model: Model = get_autoencoder_keras(1000, Adam(learning_rate=learning_rate), 'mean_squared_error')
+            print(self.model.summary())
 
     @staticmethod
     def get_file_extension():
@@ -54,9 +57,10 @@ class KerasModel(MLModel):
 
     @staticmethod
     def create(config: ConfigParams, identifier: str):
-        sequences_length = config.get_params_dict('preprocess_params')['sequences_length']
         learning_rate = config.get_params_dict('train_params')['learning_rate']
-        return KerasModel(identifier, sequences_length, learning_rate)
+        model_loader = KerasLoader(config)
+
+        return KerasModel(identifier, learning_rate, model_loader)
 
     def save(self, config: ConfigParams, path: str):
         self.model.save(path)

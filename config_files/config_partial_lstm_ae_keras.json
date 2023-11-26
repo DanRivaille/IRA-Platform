@@ -1,5 +1,5 @@
 {
-  "id": "partial_ae_keras",
+  "id": "partial_lstm_ae_keras",
   "preprocess_params": {
     "sequences_length": 1000,
     "sensor_number": 0,

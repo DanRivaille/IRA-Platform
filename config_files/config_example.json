@@ -34,5 +34,34 @@
       "first_date": "10/08/1998",
       "last_date": "10/08/1998"
     }
+  },
+
+  "network_params": {
+    "type_model": "keras_model",
+    "optimizer": "adam",
+    "loss_function": "mean_squared_error",
+    "topology": [
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 256,
+        "input_shape": [1000],
+        "activation": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 128,
+        "activation": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 256,
+        "activation": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 1000,
+        "activation": "sigmoid"
+      }
+    ]
   }
 }
