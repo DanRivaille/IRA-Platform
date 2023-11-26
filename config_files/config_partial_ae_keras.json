@@ -1,0 +1,44 @@
+{
+  "id": "partial_ae_keras",
+  "preprocess_params": {
+    "sequences_length": 1000,
+    "sensor_number": 0,
+    "range_lb": -1,
+    "range_up": 1
+  },
+  "train_params": {
+    "batch_size": 64,
+    "learning_rate": 1e-4,
+    "num_epochs": 30
+  },
+  "test_params": {
+    "macroseq_length": 60,
+    "min_feature_threshold": 1e-4,
+    "max_feature_threshold": 5e-2,
+    "number_feature_thresholds_to_try": 100
+  },
+  "network_params": {
+    "type_model": "keras_model",
+    "topology": {
+      
+    }
+  },
+  "data_params": {
+    "train_data" : {
+      "first_date": "01/03/1998",
+      "last_date": "30/03/1998"
+    },
+    "validation_train_data": {
+      "first_date": "01/02/1998",
+      "last_date": "07/02/1998"
+    },
+    "validation_test_data": {
+      "first_date": "01/04/1998",
+      "last_date": "09/04/1998"
+    },
+    "test_data": {
+      "first_date": "22/08/1998",
+      "last_date": "31/08/1998"
+    }
+  }
+}
