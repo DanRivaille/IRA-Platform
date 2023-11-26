@@ -1,11 +1,12 @@
 import numpy as np
 from torch import no_grad, cuda, save, load, enable_grad
-from torch.nn import MSELoss
+from torch.nn import MSELoss, Module
 from torch.optim import Adam
 from torch.utils.data import DataLoader
 
 from src.algorithm.ml_model.History import History
 from src.algorithm.ml_model.MLModel import MLModel
+from src.algorithm.ml_model.ModelType import ModelType
 from src.algorithm.ml_model.models.Autoencoder import Autoencoder
 from src.config.ConfigParams import ConfigParams
 from src.utils.Plotter import Plotter
@@ -18,7 +19,7 @@ class TorchModel(MLModel):
 
         self.device = TorchModel.__get_device()
 
-        self.model = Autoencoder(input_length)
+        self.model: Module = Autoencoder(input_length)
         self.model.to(self.device)
 
         self.criterion = MSELoss
@@ -27,6 +28,10 @@ class TorchModel(MLModel):
     @staticmethod
     def get_file_extension():
         return '.pth'
+
+    @staticmethod
+    def get_model_type() -> ModelType:
+        return ModelType.TORCH_MODEL
 
     @staticmethod
     def __get_device():

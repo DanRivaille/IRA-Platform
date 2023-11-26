@@ -1,7 +1,5 @@
 import os
 
-from torch.utils.data import DataLoader
-
 from src.algorithm.Results import Results
 from src.algorithm.ml_model.History import History
 from src.algorithm.ml_model.MLModel import MLModel
@@ -59,16 +57,16 @@ class Orchestrator:
 
     def train_model(self):
         batch_size = self.__config_params.get_params_dict('train_params')['batch_size']
-        train_loader = DataLoader(self.__train_dataset.get_torch_dataset(), batch_size=batch_size)
-        valid_loader = DataLoader(self.__valid_dataset.get_torch_dataset(), batch_size=batch_size)
+        train_loader = self.__train_dataset.get_dataloader(self.__model.get_model_type(), batch_size)
+        valid_loader = self.__valid_dataset.get_dataloader(self.__model.get_model_type(), batch_size)
 
         # Model training
         self.__history = self.__model.train(self.__config_params, train_loader, valid_loader)
 
     def test_model(self):
         batch_size = self.__config_params.get_params_dict('train_params')['batch_size']
-        test_loader = DataLoader(self.__test_dataset.get_torch_dataset(), batch_size=batch_size)
-        valid_loader = DataLoader(self.__valid_dataset.get_torch_dataset(), batch_size=batch_size)
+        test_loader = self.__test_dataset.get_dataloader(self.__model.get_model_type(), batch_size)
+        valid_loader = self.__valid_dataset.get_dataloader(self.__model.get_model_type(), batch_size)
 
         anomaly_detector = AnomalyDetector(self.__model, self.__config_params)
         self.__results = anomaly_detector.detect_damage(test_loader, valid_loader)

@@ -1,6 +1,8 @@
 import os
 
 from src.Orchestrator import Orchestrator
+from src.algorithm.ml_model.KerasModel import KerasModel
+from src.algorithm.ml_model.ModelType import ModelType
 from src.algorithm.ml_model.TorchModel import TorchModel
 from src.config.CommonPath import CommonPath
 from src.config.ConfigParams import ConfigParams
@@ -25,7 +27,12 @@ def main():
     sequence_normalizer = SequenceNormalizer(data_range)
     preprocessing_steps = [sequence_splitter, sequence_normalizer]
 
-    model_class = TorchModel
+    model_type = ModelType.KERAS_MODEL
+
+    if ModelType.KERAS_MODEL is model_type:
+        model_class = KerasModel
+    else:
+        model_class = TorchModel
 
     if not args.is_test:
         # Model creation
