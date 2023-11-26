@@ -19,9 +19,31 @@
   },
   "network_params": {
     "type_model": "keras_model",
-    "topology": {
-      
-    }
+    "optimizer": "adam",
+    "loss_function": "mean_squared_error",
+    "topology": [
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 256,
+        "input_shape": [1000],
+        "activation_function": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 128,
+        "activation_function": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 256,
+        "activation_function": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 1000,
+        "activation_function": "sigmoid"
+      }
+    ]
   },
   "data_params": {
     "train_data" : {
