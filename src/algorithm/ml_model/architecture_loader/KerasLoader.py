@@ -18,8 +18,7 @@ class KerasLoader:
             model.add(KerasLoader.__load_layer(layer))
 
         compilation_params = KerasLoader.__load_compilation_params(self.config_params)
-        #model.compile(**compilation_params)
-        model.compile(optimizer=Adam(learning_rate=1e-3), loss='mean_squared_error')
+        model.compile(**compilation_params)
 
         return model
 

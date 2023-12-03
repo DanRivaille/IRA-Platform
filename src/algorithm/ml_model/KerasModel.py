@@ -23,14 +23,13 @@ class KerasModel(MLModel):
         super().__init__(identifier)
         self.__device = KerasModel.__get_device()
 
-        self.__reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.9,
-                                             patience=4, min_lr=learning_rate / 100)
+        self.__reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.9, patience=4, min_lr=learning_rate/100)
         print(self.__device)
 
         # instanciate a keras model
         with device(self.__device):
-            self.model: Model = model_loader.load()
-            #self.model: Model = get_autoencoder_keras(1000, Adam(learning_rate=learning_rate), 'mean_squared_error')
+            #self.model: Model = model_loader.load()
+            self.model: Model = get_autoencoder_keras(1000, Adam(learning_rate=learning_rate), 'mean_squared_error')
             print(self.model.summary())
 
     @staticmethod
