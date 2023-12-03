@@ -23,9 +23,16 @@ def main():
     data_range = (preprocess_params.get('range_lb'), preprocess_params.get('range_up'))
 
     # Data loading and preprocessing
-    sequence_splitter = SequenceSplitter(sequences_length)
-    sequence_normalizer = SequenceNormalizer(data_range)
-    preprocessing_steps = [sequence_splitter, sequence_normalizer]
+    # Uncomment the next code to use LSTM-AE
+    split_before_normalization = SequenceSplitter(sequences_length, 0)
+    normalize_sequences = SequenceNormalizer(data_range)
+    split_after_normalization = SequenceSplitter(sequences_length, 1)
+    preprocessing_steps = [split_before_normalization, normalize_sequences, split_after_normalization]
+
+    # Uncomment the next code to use AE
+    # split_before_normalization = SequenceSplitter(sequences_length)
+    # normalize_sequences = SequenceNormalizer(data_range)
+    # preprocessing_steps = [split_before_normalization, normalize_sequences]
 
     model_type = ModelType.KERAS_MODEL
 

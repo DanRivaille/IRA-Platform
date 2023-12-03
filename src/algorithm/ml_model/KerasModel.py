@@ -29,8 +29,8 @@ class KerasModel(MLModel):
 
         # instanciate a keras model
         with device(self.__device):
-            #self.model: Model = model_loader.load()
-            self.model: Model = get_autoencoder_keras(1000, Adam(learning_rate=learning_rate), 'mean_squared_error')
+            self.model: Model = model_loader.load()
+            #self.model: Model = get_autoencoder_keras(1000, Adam(learning_rate=learning_rate), 'mean_squared_error')
             #self.model: Model = get_lstm_ae_keras(50, 1, Adam(learning_rate=learning_rate), 'mean_squared_error')
             print(self.model.summary())
 

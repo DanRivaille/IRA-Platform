@@ -41,9 +41,10 @@ class KerasLoader:
 
     @staticmethod
     def __load_layer(layer_info: dict):
-        layer = KerasLoader.__get_layer(layer_info.get('layer'))
+        layer_name = layer_info.get('layer')
+        layer = KerasLoader.__get_layer(layer_name)
 
-        if layer == 'time_distributed_keras_layer':
+        if layer_name == 'time_distributed_keras_layer':
             return layer(KerasLoader.__load_layer(layer_info['time_distributed_layer']))
 
         layer_params = KerasLoader.__get_layer_params(layer_info)

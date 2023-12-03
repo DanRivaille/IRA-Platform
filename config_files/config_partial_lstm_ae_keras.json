@@ -1,14 +1,14 @@
 {
   "id": "partial_lstm_ae_keras",
   "preprocess_params": {
-    "sequences_length": 1000,
+    "sequences_length": 50,
     "sensor_number": 0,
     "range_lb": -1,
     "range_up": 1
   },
   "train_params": {
     "batch_size": 64,
-    "learning_rate": 1e-4,
+    "learning_rate": 1e-3,
     "num_epochs": 30
   },
   "test_params": {

@@ -26,7 +26,6 @@ class Orchestrator:
 
         self.__history: History | None = None
 
-
         self.__model_folder: str = build_model_folderpath(self.__model.identifier,
                                                           self.__config_params.get_params_dict('id'))
 
