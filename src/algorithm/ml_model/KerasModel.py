@@ -12,6 +12,7 @@ from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.ModelType import ModelType
 from src.algorithm.ml_model.architecture_loader.KerasLoader import KerasLoader
 from src.algorithm.ml_model.models.AEKeras import get_autoencoder_keras
+from src.algorithm.ml_model.models.LSTM_AE_Keras import get_lstm_ae_keras
 from src.config.ConfigParams import ConfigParams
 
 
@@ -30,6 +31,7 @@ class KerasModel(MLModel):
         with device(self.__device):
             #self.model: Model = model_loader.load()
             self.model: Model = get_autoencoder_keras(1000, Adam(learning_rate=learning_rate), 'mean_squared_error')
+            #self.model: Model = get_lstm_ae_keras(50, 1, Adam(learning_rate=learning_rate), 'mean_squared_error')
             print(self.model.summary())
 
     @staticmethod
