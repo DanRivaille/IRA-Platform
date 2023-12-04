@@ -7,6 +7,7 @@ from src.algorithm.ml_model.TorchModel import TorchModel
 from src.config.CommonPath import CommonPath
 from src.config.ConfigParams import ConfigParams
 from src.dataset.Z24Dataset import Z24Dataset
+from src.dataset.preprocessing.LowPassFilter import LowPassFilter
 from src.dataset.preprocessing.SequenceNormalizer import SequenceNormalizer
 from src.dataset.preprocessing.SequenceSplitter import SequenceSplitter
 from src.utils.ParserArguments import ParserArguments
@@ -24,15 +25,16 @@ def main():
 
     # Data loading and preprocessing
     # Uncomment the next code to use LSTM-AE
-    split_before_normalization = SequenceSplitter(sequences_length, 0)
-    normalize_sequences = SequenceNormalizer(data_range)
-    split_after_normalization = SequenceSplitter(sequences_length, 1)
-    preprocessing_steps = [split_before_normalization, normalize_sequences, split_after_normalization]
+    # split_before_normalization = SequenceSplitter(sequences_length, 0)
+    # normalize_sequences = SequenceNormalizer(data_range)
+    # split_after_normalization = SequenceSplitter(sequences_length, 1)
+    # preprocessing_steps = [split_before_normalization, normalize_sequences, split_after_normalization]
 
     # Uncomment the next code to use AE
-    # split_before_normalization = SequenceSplitter(sequences_length)
-    # normalize_sequences = SequenceNormalizer(data_range)
-    # preprocessing_steps = [split_before_normalization, normalize_sequences]
+    split_before_normalization = SequenceSplitter(sequences_length)
+    normalize_sequences = SequenceNormalizer(data_range)
+    low_pass_filter = LowPassFilter(18.0, 100.0, 8)
+    preprocessing_steps = [low_pass_filter, split_before_normalization, normalize_sequences]
 
     model_type = ModelType.KERAS_MODEL
 
