@@ -33,10 +33,10 @@ def main():
     # Uncomment the next code to use AE
     split_before_normalization = SequenceSplitter(sequences_length)
     normalize_sequences = SequenceNormalizer(data_range)
-    low_pass_filter = LowPassFilter(18.0, 100.0, 8)
-    preprocessing_steps = [low_pass_filter, split_before_normalization, normalize_sequences]
+    # low_pass_filter = LowPassFilter(18.0, 100.0, 8)
+    preprocessing_steps = [split_before_normalization, normalize_sequences]
 
-    model_type = ModelType.KERAS_MODEL
+    model_type = ModelType.TORCH_MODEL
 
     if ModelType.KERAS_MODEL is model_type:
         model_class = KerasModel

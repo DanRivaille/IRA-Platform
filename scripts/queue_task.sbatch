@@ -11,10 +11,12 @@
 ROOT_PROJECT_FOLDER=/home/ivan.santos/repositories/IRA-Platform
 SOURCE_FOLDER=$ROOT_PROJECT_FOLDER/src
 
-#source $HOME/miniconda3/etc/profile.d/conda.sh
-#conda activate IRA
+source $HOME/miniconda3/etc/profile.d/conda.sh
+conda activate IRA
 
-#python3 $ROOT_PROJECT_FOLDER/main.py --id test_ae --config $ROOT_PROJECT_FOLDER/config_files/config_full_ae2.json --save
-python3 $ROOT_PROJECT_FOLDER/main.py --id test_ae --config $ROOT_PROJECT_FOLDER/config_files/config_example.json --save
-#python3 $ROOT_PROJECT_FOLDER/main.py --id test_ae --config $ROOT_PROJECT_FOLDER/config_files/config_full_ae2.json --save --test
-python3 $ROOT_PROJECT_FOLDER/main.py --id test_ae --config $ROOT_PROJECT_FOLDER/config_files/config_example.json --save --test
+python3 $ROOT_PROJECT_FOLDER/main.py --id test_ae --config $ROOT_PROJECT_FOLDER/config_files/config_full_ae2.json --save
+#python3 $ROOT_PROJECT_FOLDER/main.py --id test_ae --config $ROOT_PROJECT_FOLDER/config_files/config_example.json --save
+python3 $ROOT_PROJECT_FOLDER/main.py --id test_ae --config $ROOT_PROJECT_FOLDER/config_files/config_full_ae2.json --save --test
+#python3 $ROOT_PROJECT_FOLDER/main.py --id test_ae --config $ROOT_PROJECT_FOLDER/config_files/config_example.json --save --test
+
+conda deactivate

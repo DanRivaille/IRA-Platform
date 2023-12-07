@@ -28,7 +28,6 @@ class KerasLoader:
         optimizer = KerasLoader.__get_optimizer(network_params.get('optimizer'))
         learning_rate = config_params.get_params_dict('train_params')['learning_rate']
 
-        print(network_params.get('loss_function'))
         return {
             'optimizer': optimizer(learning_rate=learning_rate),
             'loss': network_params.get('loss_function')

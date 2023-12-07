@@ -13,7 +13,7 @@
   },
   "test_params": {
     "macroseq_length": 60,
-    "min_feature_threshold": 1e-4,
+    "min_feature_threshold": 1e-6,
     "max_feature_threshold": 5e-2,
     "number_feature_thresholds_to_try": 100
   },
@@ -48,21 +48,21 @@
     ]
   },
   "data_params": {
-    "train_data" : {
-      "first_date": "01/03/1998",
-      "last_date": "30/03/1998"
+    "train_data": {
+      "first_date": "01/02/1998",
+      "last_date": "01/02/1998"
     },
     "validation_train_data": {
-      "first_date": "01/02/1998",
-      "last_date": "07/02/1998"
+      "first_date": "01/03/1998",
+      "last_date": "01/03/1998"
     },
     "validation_test_data": {
-      "first_date": "01/04/1998",
-      "last_date": "09/04/1998"
+      "first_date": "01/03/1998",
+      "last_date": "01/03/1998"
     },
     "test_data": {
-      "first_date": "22/08/1998",
-      "last_date": "31/08/1998"
+      "first_date": "10/08/1998",
+      "last_date": "10/08/1998"
     }
   }
 }
