@@ -1,0 +1,66 @@
+{
+  "id": "full_ae",
+  "preprocess_params": {
+    "sequences_length": 1000,
+    "sensor_number": 0,
+    "range_lb": -1,
+    "range_up": 1
+  },
+  "train_params": {
+    "batch_size": 64,
+    "learning_rate": 1e-4,
+    "num_epochs": 30
+  },
+  "test_params": {
+    "macroseq_length": 60,
+    "min_feature_threshold": 1e-4,
+    "max_feature_threshold": 5e-2,
+    "number_feature_thresholds_to_try": 100
+  },
+  "data_params": {
+    "train_data" : {
+      "first_date": "01/02/1998",
+      "last_date": "28/02/1998"
+    },
+    "validation_train_data": {
+      "first_date": "01/03/1998",
+      "last_date": "07/03/1998"
+    },
+    "validation_test_data": {
+      "first_date": "01/03/1998",
+      "last_date": "07/03/1998"
+    },
+    "test_data": {
+      "first_date": "22/08/1998",
+      "last_date": "31/08/1998"
+    }
+  },
+  "network_params": {
+    "type_model": "keras_model",
+    "optimizer": "adam",
+    "loss_function": "mean_squared_error",
+    "topology": [
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 256,
+        "input_shape": [1000],
+        "activation": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 128,
+        "activation": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 256,
+        "activation": "tanh"
+      },
+      {
+        "layer": "dense_keras_layer",
+        "neurons": 1000,
+        "activation": "sigmoid"
+      }
+    ]
+  }
+}

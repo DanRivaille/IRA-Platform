@@ -1,3 +1,11 @@
+# Project things
+*.png
+models_parameters/
+
+# IDEs
+.idea
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
