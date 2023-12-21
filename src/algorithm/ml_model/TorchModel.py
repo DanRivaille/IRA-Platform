@@ -13,8 +13,16 @@ from src.utils.Plotter import Plotter
 
 
 class TorchModel(MLModel):
-
+    """
+    A class representing a Torch model.
+    """
     def __init__(self, identifier: str, input_length: int, learning_rate: float):
+        """
+        Initializes an instance of TorchModel.
+        @param identifier An identifier for the model.
+        @param input_length The size of each input and output layer entry.
+        @param learning_rate The learning rate for the model.
+        """
         super().__init__(identifier)
 
         self.device = TorchModel.__get_device()
@@ -27,14 +35,23 @@ class TorchModel(MLModel):
 
     @staticmethod
     def get_file_extension():
+        """
+        Get the file extension for the file with the parameters of the Torch model.
+        """
         return '.pth'
 
     @staticmethod
     def get_model_type() -> ModelType:
+        """
+        Get the Torch model type.
+        """
         return ModelType.TORCH_MODEL
 
     @staticmethod
     def __get_device():
+        """
+        Gets the device string for PyTorch operations, either CUDA (GPU) or CPU.
+        """
         if cuda.is_available():
             device = 'cuda:0'
         else:
@@ -43,6 +60,12 @@ class TorchModel(MLModel):
 
     @staticmethod
     def load(config: ConfigParams, identifier: str, path: str):
+        """
+        Loads the Torch model with the specified configurations.
+        @param config A class for loading configuration parameters related to a model.
+        @param identifier An identifier for the model.
+        @param path The directory path of the configurations to load.
+        """
         torch_model = TorchModel.create(config, identifier)
         torch_model.model.load_state_dict(load(path))
         torch_model.model.eval()
@@ -52,14 +75,30 @@ class TorchModel(MLModel):
 
     @staticmethod
     def create(config: ConfigParams, identifier: str):
+        """
+        Creates the Torch model with the specified configurations.
+        @param config A class for loading configuration parameters related to a model.
+        @param identifier An identifier for the model.
+        """
         sequences_length = config.get_params_dict('preprocess_params')['sequences_length']
         learning_rate = config.get_params_dict('train_params')['learning_rate']
         return TorchModel(identifier, sequences_length, learning_rate)
 
     def save(self, config: ConfigParams, path: str):
+        """
+        Saves the Torch model to the specified path.
+        @param path The directory path of the configurations to save.
+        """
         save(self.model.state_dict(), path)
 
     def train(self, config: ConfigParams, trainloader: DataLoader, validationloader: DataLoader | None) -> History:
+        """
+        Runs the train process of the Torch model.
+        @param config A class for loading configuration parameters related to a model.
+        @param trainloader DataLoader containing training data.
+        @param validationloader DataLoader containing validation data.
+        @return History A class for saving the training history data of model execution.
+        """
         num_epochs = config.get_params_dict('train_params')['num_epochs']
 
         train_error = []
@@ -89,14 +128,15 @@ class TorchModel(MLModel):
     def test(self, config: ConfigParams, testloader: DataLoader, validationloader: DataLoader):
         pass
 
-    """
-    Predict the data in dataloader using the current state of the model
-    @param is_train_data If it is True, process the data with the gradient enable and compute one step of the optimizer
-    @param criterion_reduction ('mean', 'none'). 'mean' return the loss mean of the batch. 'none' return the loss for
-    each sample.
-    @return Tuple: (predictions, errors)
-    """
+    
     def predict(self, dataloader: DataLoader, is_train_data: bool = False, criterion_reduction: str = 'mean') -> tuple:
+        """
+        Predict the data in dataloader using the current state of the model.
+        @param is_train_data If it is True, process the data with the gradient enable and compute one step of the optimizer
+        @param criterion_reduction ('mean', 'none'). 'mean' return the loss mean of the batch. 'none' return the loss for
+        each sample.
+        @return Tuple: (predictions, errors)
+        """
         losses = []
         criterion = self.criterion(reduction=criterion_reduction)
 
