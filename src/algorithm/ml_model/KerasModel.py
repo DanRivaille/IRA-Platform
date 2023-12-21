@@ -17,10 +17,19 @@ from src.config.ConfigParams import ConfigParams
 
 
 class KerasModel(MLModel):
+    """
+    A class representing a Keras model.
+    """
     def __init__(self,
                  identifier: str,
                  learning_rate: float,
                  model_loader: KerasLoader):
+        """
+        Initializes an instance of KerasModel.
+        @param identifier An identifier for the model.
+        @param learning_rate The learning rate for the model.
+        @param model_loader A class responsible for loading a Keras model based on configuration parameters.
+        """
         super().__init__(identifier)
         self.__device = KerasModel.__get_device()
 
@@ -36,14 +45,23 @@ class KerasModel(MLModel):
 
     @staticmethod
     def get_file_extension():
+        """
+        Get the file extension for the file with the parameters of the Keras model.
+        """
         return '.keras'
 
     @staticmethod
     def get_model_type() -> ModelType:
+        """
+        Get the Keras model type.
+        """
         return ModelType.KERAS_MODEL
 
     @staticmethod
     def __get_device():
+        """
+        Gets the device string for TensorFlow operations, either GPU or CPU.
+        """
         print(list_physical_devices('GPU'))
         if len(list_physical_devices('GPU')) > 0:
             return '/device:GPU:0'
@@ -52,21 +70,43 @@ class KerasModel(MLModel):
 
     @staticmethod
     def load(config: ConfigParams, identifier: str, path: str):
+        """
+        Loads the Keras model with the specified configurations.
+        @param config A class for loading configuration parameters related to a model.
+        @param identifier An identifier for the model.
+        @param path The directory path of the configurations to load.
+        """
         keras_model = KerasModel.create(config, identifier)
         keras_model.model = load_model(path)
         return keras_model
 
     @staticmethod
     def create(config: ConfigParams, identifier: str):
+        """
+        Creates the Keras model with the specified configurations.
+        @param config A class for loading configuration parameters related to a model.
+        @param identifier An identifier for the model.
+        """
         learning_rate = config.get_params_dict('train_params')['learning_rate']
         model_loader = KerasLoader(config)
 
         return KerasModel(identifier, learning_rate, model_loader)
 
     def save(self, config: ConfigParams, path: str):
+        """
+        Saves the Keras model to the specified path.
+        @param path The directory path of the configurations to save.
+        """
         self.model.save(path)
 
     def train(self, config: ConfigParams, trainloader: np.ndarray, validationloader: np.ndarray | None) -> History:
+        """
+        Runs the train process of the Keras model.
+        @param config A class for loading configuration parameters related to a model.
+        @param trainloader Array containing training data.
+        @param validationloader Array containing validation data.
+        @return History A class for saving the training history data of model execution.
+        """
         num_epochs = config.get_params_dict('train_params')['num_epochs']
         batch_size = config.get_params_dict('train_params')['batch_size']
 
@@ -91,6 +131,12 @@ class KerasModel(MLModel):
         pass
 
     def predict(self, dataloader: np.ndarray, return_per_sample: bool = True, **kwargs) -> tuple:
+        """
+        Predict the data in dataloader using the current state of the model.
+        @param dataloader Array containing the data to predict.
+        @param return_per_sample If it is True, return the error per sample.
+        @return Tuple: (predictions, errors per sample)
+        """
         sequences_predicted = self.model.predict(dataloader, verbose=0)
         error_per_sample = mean_squared_error(dataloader, sequences_predicted).numpy()
 
