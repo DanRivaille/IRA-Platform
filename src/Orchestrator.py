@@ -17,12 +17,14 @@ class Orchestrator:
     """
     def __init__(self, config_params: ConfigParams,
                  model: MLModel,
-                 preprocessing_steps: [PreprocessStep]):
+                 preprocessing_steps: [PreprocessStep],
+                 folder_name: str):
         """
         Initializes an instance of Orchestrator.
         @param config_params A class for loading and saving configuration parameters related to a model.
         @param model The current machine learning model.
         @param preprocessing_steps The list of preprocessing steps to be applied to the data.
+        @param folder_name The folder name to save the runs.
         """
         self.__results: Results | None = None
         self.__config_params: ConfigParams = config_params
@@ -36,7 +38,8 @@ class Orchestrator:
         self.__history: History | None = None
 
         self.__model_folder: str = build_model_folderpath(self.__model.identifier,
-                                                          self.__config_params.get_params_dict('id'))
+                                                          self.__config_params.get_params_dict('id'),
+                                                          folder_name)
 
     def load_train_data(self, class_dataset: IRADataset.__class__):
         """

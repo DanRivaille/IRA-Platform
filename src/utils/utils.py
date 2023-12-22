@@ -16,11 +16,12 @@ def stack_arrays(stacked_array: np.ndarray, new_array: np.ndarray) -> np.ndarray
         return new_array
 
 
-def build_model_folderpath(model_identifier: str, config_identifier: str):
+def build_model_folderpath(model_identifier: str, config_identifier: str, folder_name: str):
     """
     Builds a directory path for a model and its configuration based on the provided identifiers
     @param model_identifier A string identifier for the current model.
-    @param config_identifier A string identifier of the current model configuration. 
+    @param config_identifier A string identifier of the current model configuration.
+    @param folder_name The folder name to save the runs. 
     """
-    model_folder = f'{model_identifier}_cnf_{config_identifier}'
+    model_folder = os.path.join(folder_name, f'{model_identifier}_cnf_{config_identifier}')
     return os.path.join(CommonPath.MODEL_PARAMETERS_FOLDER.value, model_folder)
