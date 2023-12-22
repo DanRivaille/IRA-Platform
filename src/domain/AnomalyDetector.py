@@ -8,9 +8,17 @@ from src.config.ConfigParams import ConfigParams
 
 
 class AnomalyDetector:
+    """
+    A class that uses a trained MLModel to detect anomalies in given datasets.
+    """
     def __init__(self,
                  model: MLModel,
                  config: ConfigParams):
+        """
+        Initializes an instance of AnomalyDetector.
+        @param model The trained MLModel used for anomaly detection.
+        @param config The configuration parameters for the anomaly detection process.
+        """
         self.__trained_model = model
         self.__config = config
 
@@ -19,6 +27,11 @@ class AnomalyDetector:
     def detect_damage(self,
                       damaged_dataloader: DataLoader | np.ndarray,
                       healthy_dataloader: DataLoader | np.ndarray) -> Results:
+        """
+        Detects features damaged in the provided datasets and returns the Results.
+        @param damaged_dataloader DataLoader or numpy array containing damaged data.
+        @param healthy_dataloader DataLoader or numpy array containing healthy data.
+        """
         _, features_damaged = self.__trained_model.predict(damaged_dataloader, is_train_data=False,
                                                            criterion_reduction='none')
         _, features_healthy = self.__trained_model.predict(healthy_dataloader, is_train_data=False,
@@ -31,6 +44,12 @@ class AnomalyDetector:
 
     def __detect_damage(self, feature_vector: np.ndarray, feature_threshold: float,
                         macroseq_threshold: float):
+        """
+        Detects damage using the specified feature and macro-sequence thresholds.
+        @param feature_vector The feature vector to be evaluated for damage.
+        @param feature_threshold The threshold for the feature vector.
+        @param macroseq_threshold The threshold for macro-sequences.
+        """
         # Se divide el vector de caracteristicas en macro-secuencias
         macroseq_feature_vector = self.__split_in_macrosequences(feature_vector)
 
@@ -44,15 +63,29 @@ class AnomalyDetector:
         return AnomalyDetector.__evaluate_thresholds(macrosequences_labels_vector, macroseq_threshold)
 
     def __split_in_macrosequences(self, labels: np.ndarray) -> np.ndarray:
+        """
+        Split the vector into macro-sequences.
+        @param labels The vector of labels to be split into macro-sequences.
+        """
         n_samples = labels.shape[0]
         samples_to_consider = n_samples - (n_samples % self.__macroseq_length)
         return labels[:samples_to_consider].reshape((-1, self.__macroseq_length))
 
     @staticmethod
     def __evaluate_thresholds(feature_vector: np.ndarray, threshold: float) -> np.ndarray:
+        """
+        Evaluates which sequences or macro-sequences exceed the established threshold and labels them accordingly.
+        @param feature_vector Vector of sequences or macro-sequences.
+        @param threshold Threshold to evaluate.
+        """
         return (feature_vector > threshold).astype(int)
 
     def __find_best_thresholds(self, feature_test_vector: np.ndarray, feature_valid_vector: np.ndarray) -> tuple:
+        """
+        Finds the best thresholds for features and macro-sequences based on the pre-set range in the configuration parameters.
+        @param feature_test_vector The feature vector for testing the thresholds.
+        @param feature_valid_vector The feature vector for validation the thresholds.
+        """
         test_params = self.__config.get_params_dict('test_params')
         feature_threshold_list = np.linspace(test_params['min_feature_threshold'], test_params['max_feature_threshold'],
                                              test_params['number_feature_thresholds_to_try'])
