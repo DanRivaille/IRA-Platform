@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from torch import no_grad, cuda, save, load, enable_grad
 from torch.nn import MSELoss, Module
 from torch.optim import Adam
@@ -104,6 +105,7 @@ class TorchModel(MLModel):
         train_error = []
         validation_error = []
         learning_rate_updating = []
+        start_time = time.time()
 
         for epoch in range(num_epochs):
             _, loss = self.predict(trainloader, is_train_data=True, criterion_reduction='mean')
@@ -118,11 +120,14 @@ class TorchModel(MLModel):
 
             learning_rate_updating.append(config.get_params_dict('train_params')['learning_rate'])
 
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+
         Plotter.plot_training_curves(train_error, validation_error,
                                      filename="/home/ivan.santos/repositories/IRA-Platform/train.png")
 
         _, train_error_per_sample = self.predict(trainloader, is_train_data=False, criterion_reduction='none')
-        return History(train_error, validation_error, learning_rate_updating, train_error_per_sample)
+        return History(train_error, validation_error, learning_rate_updating, train_error_per_sample, elapsed_time)
 
     # TODO: Check this function
     def test(self, config: ConfigParams, testloader: DataLoader, validationloader: DataLoader):

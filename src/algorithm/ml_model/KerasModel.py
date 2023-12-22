@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from keras import Model
 from keras.models import load_model
 from keras.losses import mean_squared_error
@@ -110,6 +111,8 @@ class KerasModel(MLModel):
         num_epochs = config.get_params_dict('train_params')['num_epochs']
         batch_size = config.get_params_dict('train_params')['batch_size']
 
+        start_time = time.time()
+
         with device(self.__device):
             history = self.model.fit(
                 x=trainloader, y=trainloader,
@@ -120,10 +123,13 @@ class KerasModel(MLModel):
                 verbose=1
             )
 
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+
         history_dict = history.history
         _, train_error_per_sample = self.predict(trainloader, return_per_sample=True)
         learning_rate_uptating = np.array(history_dict['lr']).tolist()
-        return History(history_dict['loss'], history_dict['val_loss'], learning_rate_uptating, train_error_per_sample)
+        return History(history_dict['loss'], history_dict['val_loss'], learning_rate_uptating, train_error_per_sample, elapsed_time)
         pass
 
     # TODO: Check this function
