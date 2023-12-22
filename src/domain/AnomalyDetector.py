@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from sklearn.metrics import f1_score, roc_auc_score
 from torch.utils.data import DataLoader
 
@@ -37,10 +38,10 @@ class AnomalyDetector:
         _, features_healthy = self.__trained_model.predict(healthy_dataloader, is_train_data=False,
                                                            criterion_reduction='none')
 
-        feature_threshold, macroseq_threshold, max_f1, max_auc = self.__find_best_thresholds(features_damaged,
+        feature_threshold, macroseq_threshold, max_f1, max_auc, execution_time = self.__find_best_thresholds(features_damaged,
                                                                                              features_healthy)
 
-        return Results(feature_threshold, macroseq_threshold, max_f1, max_auc, features_damaged, features_healthy)
+        return Results(feature_threshold, macroseq_threshold, max_f1, max_auc, features_damaged, features_healthy, execution_time)
 
     def __detect_damage(self, feature_vector: np.ndarray, feature_threshold: float,
                         macroseq_threshold: float):
@@ -95,6 +96,7 @@ class AnomalyDetector:
         max_f1 = -1.0
         best_f_t = -1
         best_m_t = -1
+        start_time = time.time()
 
         for f_t in feature_threshold_list:
             for m_t in macroseq_threshold_list:
@@ -114,5 +116,8 @@ class AnomalyDetector:
                     best_f_t = f_t
                     best_m_t = m_t
 
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+
         print(f'Best values: F_t: {best_f_t} - M_t: {best_m_t} - Max AUC score: {max_auc} - Max F1 score: {max_f1}')
-        return best_f_t, best_m_t, max_f1, max_auc
+        return best_f_t, best_m_t, max_f1, max_auc, elapsed_time

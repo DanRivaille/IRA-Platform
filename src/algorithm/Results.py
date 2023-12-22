@@ -13,7 +13,8 @@ class Results:
                  max_f1: float,
                  max_auc: float,
                  damaged_features: np.ndarray,
-                 healthy_features: np.ndarray):
+                 healthy_features: np.ndarray,
+                 execution_time: float):
         """
         Initializes an instance of Results.
         @param feature_threshold The threshold to consider whether a feature is damaged.
@@ -22,6 +23,7 @@ class Results:
         @param max_auc The maximum Area Under the Curve (AUC) achieved.
         @param damaged_features An array with the features considered as damaged.
         @param healthy_features An array with the features considered as healthy.
+        @param execution_time The execution time of the model's anomaly detection process.
         """
         self.__feature_threshold = feature_threshold
         self.__macroseq_threshold = macroseq_threshold
@@ -29,6 +31,7 @@ class Results:
         self.__max_auc = max_auc
         self.__damaged_features = damaged_features
         self.__healthy_features = healthy_features
+        self.__execution_time = execution_time
 
     def __get_json_dict(self) -> dict:
         """
@@ -40,7 +43,8 @@ class Results:
             "max_f1": self.__max_f1,
             "max_auc": self.__max_auc,
             "damaged_features": self.__damaged_features.tolist(),
-            "healthy_features": self.__healthy_features.tolist()
+            "healthy_features": self.__healthy_features.tolist(),
+            "execution_time": self.__execution_time
         }
 
     def save(self, path: str):
