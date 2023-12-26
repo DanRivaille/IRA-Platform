@@ -47,7 +47,7 @@ def main():
         # Model creation
         model = model_class.create(config_params, args.model_id)
 
-        orchestrator = Orchestrator(config_params, model, preprocessing_steps)
+        orchestrator = Orchestrator(config_params, model, preprocessing_steps, args.folder_name)
         orchestrator.load_train_data(Z24Dataset)
         orchestrator.train_model()
 
@@ -55,11 +55,11 @@ def main():
             orchestrator.save_trained_model()
     else:
         # Model creation
-        model_folder = build_model_folderpath(args.model_id, config_params.get_params_dict('id'))
+        model_folder = build_model_folderpath(args.model_id, config_params.get_params_dict('id'), args.folder_name)
         model_path = 'model_trained' + model_class.get_file_extension()
         model = model_class.load(config_params, args.model_id, os.path.join(model_folder, model_path))
 
-        orchestrator = Orchestrator(config_params, model, preprocessing_steps)
+        orchestrator = Orchestrator(config_params, model, preprocessing_steps, args.folder_name)
         orchestrator.load_test_data(Z24Dataset)
         orchestrator.test_model()
 

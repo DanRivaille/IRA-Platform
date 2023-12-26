@@ -12,11 +12,24 @@ from src.utils.utils import stack_arrays
 
 
 class Z24Dataset(IRADataset):
+    """
+    A class for loading the Z24 dataset used by models (implements the abstract class IRADataset).
+    """
     def __init__(self, data: np.ndarray, type_dataset: DatasetType):
+        """
+        Initializes an instance of Z24Dataset.
+        @param data An array stack with the data from the Z24 dataset.
+        @param type_dataset The type of dataset that the model will use (TRAIN, TEST, VALIDATION TRAIN o VALIDATION TEST).
+        """
         super().__init__(data, type_dataset)
 
     @staticmethod
     def load(config: ConfigParams, type_dataset: DatasetType):
+        """
+        Loads the data of the Z24 dataset based on configuration parameters and dataset type.
+        @param config Configuration parameters for the dataset loaded from a .json file (they are the first date and last date).
+        @param type_dataset The type of dataset that the model will use (TRAIN, TEST, VALIDATION TRAIN o VALIDATION TEST).
+        """
         data_params = config.get_params_dict('data_params').get(type_dataset.value)
         first_date = datetime.strptime(data_params.get('first_date'), "%d/%m/%Y")
         last_date = datetime.strptime(data_params.get('last_date'), "%d/%m/%Y")
