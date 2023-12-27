@@ -33,7 +33,7 @@ class Z24Dataset(IRADataset):
         data_params = config.get_params_dict('data_params').get(type_dataset.value)
         first_date = datetime.strptime(data_params.get('first_date'), "%d/%m/%Y")
         last_date = datetime.strptime(data_params.get('last_date'), "%d/%m/%Y")
-        sensor_number = config.get_params_dict('preprocess_params').get('sensor_number')
+        sensor_number = config.get_params_dict('data_params').get('sensor_number')
 
         total_hours = (last_date - first_date + timedelta(days=1)) // timedelta(hours=1)
         year = str(first_date.year)

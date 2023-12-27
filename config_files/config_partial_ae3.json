@@ -1,12 +1,7 @@
 {
   "id": "partial_ae_march",
-  "preprocess_params": {
-    "sequences_length": 1000,
-    "sensor_number": 0,
-    "range_lb": -1,
-    "range_up": 1
-  },
   "train_params": {
+    "sequences_length": 1000,
     "batch_size": 64,
     "learning_rate": 1e-4,
     "num_epochs": 30
@@ -18,6 +13,7 @@
     "number_feature_thresholds_to_try": 100
   },
   "data_params": {
+    "sensor_number": 0,
     "train_data" : {
       "first_date": "01/03/1998",
       "last_date": "30/03/1998"
@@ -34,5 +30,20 @@
       "first_date": "22/08/1998",
       "last_date": "31/08/1998"
     }
-  }
+  },
+
+  "preprocessing_steps": [
+    {
+      "type": "sequence_splitter",
+      "params": {
+        "sequences_length": 1000
+      }
+    },
+    {
+      "type": "sequence_normalizer",
+      "params": {
+        "range": [-1, 1]
+      }
+    }
+  ]
 }
