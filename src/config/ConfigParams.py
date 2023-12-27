@@ -39,7 +39,7 @@ class ConfigParams:
 
         return ConfigParams(config_params, filepath)
 
-    def get_params_dict(self, key_param: str) -> str | dict | None:
+    def get_params_dict(self, key_param: str) -> str | dict | list | None:
         """
         Returns the specific configuration parameter from the dictionary for the given key.
         @param key_param The key of the parameter to retrieve.

@@ -1,12 +1,7 @@
 {
   "id": "example_config",
-  "preprocess_params": {
-    "sequences_length": 1000,
-    "sensor_number": 0,
-    "range_lb": -1,
-    "range_up": 1
-  },
   "train_params": {
+    "sequences_length": 1000,
     "batch_size": 64,
     "learning_rate": 1e-3,
     "num_epochs": 10
@@ -18,21 +13,22 @@
     "number_feature_thresholds_to_try": 10
   },
   "data_params": {
+    "sensor_number": 0,
     "train_data" : {
-      "first_date": "01/02/1998",
-      "last_date": "01/02/1998"
+      "first_date": "18/01/1998",
+      "last_date": "25/01/1998"
     },
     "validation_train_data": {
-      "first_date": "01/03/1998",
-      "last_date": "01/03/1998"
+      "first_date": "18/01/1998",
+      "last_date": "25/01/1998"
     },
     "validation_test_data": {
-      "first_date": "01/03/1998",
-      "last_date": "01/03/1998"
+      "first_date": "18/01/1998",
+      "last_date": "25/01/1998"
     },
     "test_data": {
-      "first_date": "10/08/1998",
-      "last_date": "10/08/1998"
+      "first_date": "18/01/1998",
+      "last_date": "25/01/1998"
     }
   },
 
@@ -63,5 +59,20 @@
         "activation": "sigmoid"
       }
     ]
-  }
+  },
+
+  "preprocessing_steps": [
+    {
+      "type": "sequence_splitter",
+      "params": {
+        "sequences_length": 1000
+      }
+    },
+    {
+      "type": "sequence_normalizer",
+      "params": {
+        "range": [-1, 1]
+      }
+    }
+  ]
 }
