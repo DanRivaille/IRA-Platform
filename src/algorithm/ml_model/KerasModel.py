@@ -88,7 +88,7 @@ class KerasModel(MLModel):
         @param config A class for loading configuration parameters related to a model.
         @param identifier An identifier for the model.
         """
-        learning_rate = config.get_params_dict('train_params')['learning_rate']
+        learning_rate = config.get_params('train_params')['learning_rate']
         model_loader = KerasLoader(config)
 
         return KerasModel(identifier, learning_rate, model_loader)
@@ -108,8 +108,8 @@ class KerasModel(MLModel):
         @param validationloader Array containing validation data.
         @return History A class for saving the training history data of model execution.
         """
-        num_epochs = config.get_params_dict('train_params')['num_epochs']
-        batch_size = config.get_params_dict('train_params')['batch_size']
+        num_epochs = config.get_params('train_params')['num_epochs']
+        batch_size = config.get_params('train_params')['batch_size']
 
         start_time = time.time()
 

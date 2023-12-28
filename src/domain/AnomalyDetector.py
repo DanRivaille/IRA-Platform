@@ -23,7 +23,7 @@ class AnomalyDetector:
         self.__trained_model = model
         self.__config = config
 
-        self.__macroseq_length: int = config.get_params_dict('test_params')['macroseq_length']
+        self.__macroseq_length: int = config.get_params('test_params')['macroseq_length']
 
     def detect_damage(self,
                       damaged_dataloader: DataLoader | np.ndarray,
@@ -87,7 +87,7 @@ class AnomalyDetector:
         @param feature_test_vector The feature vector for testing the thresholds.
         @param feature_valid_vector The feature vector for validation the thresholds.
         """
-        test_params = self.__config.get_params_dict('test_params')
+        test_params = self.__config.get_params('test_params')
         feature_threshold_list = np.linspace(test_params['min_feature_threshold'], test_params['max_feature_threshold'],
                                              test_params['number_feature_thresholds_to_try'])
         macroseq_threshold_list = np.linspace(0.4, 0.6, 10)

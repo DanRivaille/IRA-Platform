@@ -20,7 +20,7 @@ class KerasLoader:
         """
         Loads a Keras model with the layers specified in the provided configuration parameters.
         """
-        topology = self.config_params.get_params_dict('network_params').get('topology')
+        topology = self.config_params.get_params('network_params').get('topology')
 
         model = Sequential()
 
@@ -39,9 +39,9 @@ class KerasLoader:
         @param config_params A class for loading configuration parameters related to a model.
         @return Dict: With the compilation params (optimizer and loss function).
         """
-        network_params = config_params.get_params_dict('network_params')
+        network_params = config_params.get_params('network_params')
         optimizer = KerasLoader.__get_optimizer(network_params.get('optimizer'))
-        learning_rate = config_params.get_params_dict('train_params')['learning_rate']
+        learning_rate = config_params.get_params('train_params')['learning_rate']
 
         return {
             'optimizer': optimizer(learning_rate=learning_rate),

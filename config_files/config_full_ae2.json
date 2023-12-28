@@ -1,7 +1,10 @@
 {
   "id": "full_ae_test",
+  "global_variables": {
+    "sequences_length": 1000
+  },
   "train_params": {
-    "sequences_length": 1000,
+    "sequences_length": "sequences_length",
     "batch_size": 64,
     "learning_rate": 1e-4,
     "num_epochs": 30
@@ -36,7 +39,7 @@
     {
       "type": "sequence_splitter",
       "params": {
-        "sequences_length": 1000
+        "sequences_length": "sequences_length"
       }
     },
     {

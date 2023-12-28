@@ -1,7 +1,10 @@
 {
   "id": "partial_lstm_ae_keras",
+  "global_variables": {
+    "sequences_length": 50
+  },
   "train_params": {
-    "sequences_length": 50,
+    "sequences_length": "sequences_length",
     "batch_size": 64,
     "learning_rate": 1e-3,
     "num_epochs": 30
@@ -20,17 +23,17 @@
       {
         "layer": "lstm_keras_layer",
         "neurons": 128,
-        "input_shape": [50, 1],
+        "input_shape": ["sequences_length", 1],
         "return_sequences": false
       },
       {
         "layer": "repeat_vector_keras_layer",
-        "neurons": 50
+        "neurons": "sequences_length"
       },
       {
         "layer": "lstm_keras_layer",
         "neurons": 128,
-        "input_shape": [50, 1],
+        "input_shape": ["sequences_length", 1],
         "return_sequences": true
       },
       {
@@ -66,7 +69,7 @@
     {
       "type": "sequence_splitter",
       "params": {
-        "sequences_length": 50
+        "sequences_length": "sequences_length"
       }
     },
     {

@@ -13,6 +13,7 @@ class ConfigParams:
         """
         self.params = config_dict
         self.original_filepath = original_filepath
+        self.global_variables: dict = config_dict.get("global_variables")
 
     def save(self, overwrite_original: bool = True, new_path: str = "") -> None:
         """
@@ -39,9 +40,35 @@ class ConfigParams:
 
         return ConfigParams(config_params, filepath)
 
-    def get_params_dict(self, key_param: str) -> str | dict | list | None:
+    def get_params(self, key_param: str):
         """
-        Returns the specific configuration parameter from the dictionary for the given key.
-        @param key_param The key of the parameter to retrieve.
+        Returns the specific group of validated configuration parameters from the dictionary for the given key (validates depending on whether they are global variables or not).
+        @param key_param The key of the parameters set to retrieve.
         """
-        return self.params.get(key_param, None)
+        params = self.params.get(key_param, None)
+        return self.__validate_param(params)
+    
+    def __validate_param(self, param_to_validate):
+        """
+        Validates that the parameter and its sub-parameters use their values from global variables if they have one.
+        @param param_to_validate The parameter or group of parameters to be validated.
+        """
+        if isinstance(param_to_validate, list):
+            params = []
+            for param in param_to_validate:
+                params.append(self.__validate_param(param))
+            return params
+        
+        elif isinstance(param_to_validate, dict):
+            params = {}
+            for key in param_to_validate:
+                params[key] = self.__validate_param(param_to_validate[key])
+            return params
+        
+        elif isinstance(param_to_validate, str):
+            value_in_global_variables = self.global_variables.get(param_to_validate)
+            if value_in_global_variables is not None:
+                return value_in_global_variables
+            
+        return param_to_validate
+    

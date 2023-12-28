@@ -23,7 +23,7 @@ class PreprocessStepLoader:
         """
         Loads and initializes a list of preprocessing steps based on the configuration parameters.
         """
-        preprocessing_steps_info = self.config_params.get_params_dict("preprocessing_steps")
+        preprocessing_steps_info = self.config_params.get_params("preprocessing_steps")
         preprocessing_steps = []
        
         for preprocess_step in preprocessing_steps_info:

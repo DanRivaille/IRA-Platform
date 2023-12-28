@@ -1,7 +1,10 @@
 {
   "id": "partial_ae_keras",
+  "global_variables": {
+    "sequences_length": 1000
+  },
   "train_params": {
-    "sequences_length": 1000,
+    "sequences_length": "sequences_length",
     "batch_size": 64,
     "learning_rate": 1e-4,
     "num_epochs": 30
@@ -20,7 +23,7 @@
       {
         "layer": "dense_keras_layer",
         "neurons": 256,
-        "input_shape": [1000],
+        "input_shape": ["sequences_length"],
         "activation": "tanh"
       },
       {
@@ -35,7 +38,7 @@
       },
       {
         "layer": "dense_keras_layer",
-        "neurons": 1000,
+        "neurons": "sequences_length",
         "activation": "sigmoid"
       }
     ]
@@ -64,7 +67,7 @@
     {
       "type": "sequence_splitter",
       "params": {
-        "sequences_length": 1000
+        "sequences_length": "sequences_length"
       }
     },
     {
