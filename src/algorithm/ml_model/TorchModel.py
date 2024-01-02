@@ -81,8 +81,8 @@ class TorchModel(MLModel):
         @param config A class for loading configuration parameters related to a model.
         @param identifier An identifier for the model.
         """
-        sequences_length = config.get_params_dict('train_params')['sequences_length']
-        learning_rate = config.get_params_dict('train_params')['learning_rate']
+        sequences_length = config.get_params('train_params')['sequences_length']
+        learning_rate = config.get_params('train_params')['learning_rate']
         return TorchModel(identifier, sequences_length, learning_rate)
 
     def save(self, config: ConfigParams, path: str):
@@ -100,7 +100,7 @@ class TorchModel(MLModel):
         @param validationloader DataLoader containing validation data.
         @return History A class for saving the training history data of model execution.
         """
-        num_epochs = config.get_params_dict('train_params')['num_epochs']
+        num_epochs = config.get_params('train_params')['num_epochs']
 
         train_error = []
         validation_error = []
@@ -118,13 +118,13 @@ class TorchModel(MLModel):
             if (epoch % 5) == 0:
                 print(f'epoch [{epoch + 1}/{num_epochs}], loss:{loss: .7f}')
 
-            learning_rate_updating.append(config.get_params_dict('train_params')['learning_rate'])
+            learning_rate_updating.append(config.get_params('train_params')['learning_rate'])
 
         end_time = time.time()
         elapsed_time = end_time - start_time
 
-        #Plotter.plot_training_curves(train_error, validation_error,
-        #                             filename="/home/ivan.santos/repositories/IRA-Platform/train.png")
+        Plotter.plot_training_curves(train_error, validation_error,
+                                     filename="/home/ivan.santos/repositories/IRA-Platform/train.png")
 
         _, train_error_per_sample = self.predict(trainloader, is_train_data=False, criterion_reduction='none')
         return History(train_error, validation_error, learning_rate_updating, train_error_per_sample, elapsed_time)

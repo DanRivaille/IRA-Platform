@@ -30,10 +30,10 @@ class Z24Dataset(IRADataset):
         @param config Configuration parameters for the dataset loaded from a .json file (they are the first date and last date).
         @param type_dataset The type of dataset that the model will use (TRAIN, TEST, VALIDATION TRAIN o VALIDATION TEST).
         """
-        data_params = config.get_params_dict('data_params').get(type_dataset.value)
+        data_params = config.get_params('data_params').get(type_dataset.value)
         first_date = datetime.strptime(data_params.get('first_date'), "%d/%m/%Y")
         last_date = datetime.strptime(data_params.get('last_date'), "%d/%m/%Y")
-        sensor_number = config.get_params_dict('data_params').get('sensor_number')
+        sensor_number = config.get_params('data_params').get('sensor_number')
 
         total_hours = (last_date - first_date + timedelta(days=1)) // timedelta(hours=1)
         year = str(first_date.year)

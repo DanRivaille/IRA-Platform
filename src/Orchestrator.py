@@ -38,7 +38,7 @@ class Orchestrator:
         self.__history: History | None = None
 
         self.__model_folder: str = build_model_folderpath(self.__model.identifier,
-                                                          self.__config_params.get_params_dict('id'),
+                                                          self.__config_params.get_params('id'),
                                                           folder_name)
 
     def load_train_data(self, class_dataset: IRADataset.__class__):
@@ -87,7 +87,7 @@ class Orchestrator:
         """
         Trains the machine learning model using the training and validation datasets.
         """
-        batch_size = self.__config_params.get_params_dict('train_params')['batch_size']
+        batch_size = self.__config_params.get_params('train_params')['batch_size']
         train_loader = self.__train_dataset.get_dataloader(self.__model.get_model_type(), batch_size)
         valid_loader = self.__valid_dataset.get_dataloader(self.__model.get_model_type(), batch_size)
 
@@ -98,7 +98,7 @@ class Orchestrator:
         """
         Tests the machine learning model using the testing and validation datasets.
         """
-        batch_size = self.__config_params.get_params_dict('train_params')['batch_size']
+        batch_size = self.__config_params.get_params('train_params')['batch_size']
         test_loader = self.__test_dataset.get_dataloader(self.__model.get_model_type(), batch_size)
         valid_loader = self.__valid_dataset.get_dataloader(self.__model.get_model_type(), batch_size)
 

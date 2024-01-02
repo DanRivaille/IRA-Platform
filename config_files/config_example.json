@@ -1,7 +1,10 @@
 {
   "id": "example_config",
+  "global_variables": {
+    "sequences_length": 1000
+  },
   "train_params": {
-    "sequences_length": 1000,
+    "sequences_length": "sequences_length",
     "batch_size": 64,
     "learning_rate": 1e-3,
     "num_epochs": 10
@@ -15,20 +18,20 @@
   "data_params": {
     "sensor_number": 0,
     "train_data" : {
-      "first_date": "18/01/1998",
-      "last_date": "25/01/1998"
+      "first_date": "01/02/1998",
+      "last_date": "01/02/1998"
     },
     "validation_train_data": {
-      "first_date": "18/01/1998",
-      "last_date": "25/01/1998"
+      "first_date": "01/03/1998",
+      "last_date": "01/03/1998"
     },
     "validation_test_data": {
-      "first_date": "18/01/1998",
-      "last_date": "25/01/1998"
+      "first_date": "01/03/1998",
+      "last_date": "01/03/1998"
     },
     "test_data": {
-      "first_date": "18/01/1998",
-      "last_date": "25/01/1998"
+      "first_date": "10/08/1998",
+      "last_date": "10/08/1998"
     }
   },
 
@@ -40,7 +43,7 @@
       {
         "layer": "dense_keras_layer",
         "neurons": 256,
-        "input_shape": [1000],
+        "input_shape": ["sequences_length"],
         "activation": "tanh"
       },
       {
@@ -55,7 +58,7 @@
       },
       {
         "layer": "dense_keras_layer",
-        "neurons": 1000,
+        "neurons": "sequences_length",
         "activation": "sigmoid"
       }
     ]
@@ -65,7 +68,7 @@
     {
       "type": "sequence_splitter",
       "params": {
-        "sequences_length": 1000
+        "sequences_length": "sequences_length"
       }
     },
     {

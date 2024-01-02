@@ -39,7 +39,7 @@ def main():
             orchestrator.save_trained_model()
     else:
         # Model creation
-        model_folder = build_model_folderpath(args.model_id, config_params.get_params_dict('id'), args.folder_name)
+        model_folder = build_model_folderpath(args.model_id, config_params.get_params('id'), args.folder_name)
         model_path = 'model_trained' + model_class.get_file_extension()
         model = model_class.load(config_params, args.model_id, os.path.join(model_folder, model_path))
 
