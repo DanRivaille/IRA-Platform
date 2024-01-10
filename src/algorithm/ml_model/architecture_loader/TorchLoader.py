@@ -6,7 +6,7 @@ from src.config.ConfigParams import ConfigParams
 class TorchLoader:
     def __init__(self, config_params: ConfigParams):
         self.__config: config_params = config_params
-        self.__topology: [dict] = self.__config.get_params_group('network_params').get('topology')
+        self.__topology: [dict] = self.__config.get_params('network_params').get('topology')
 
     def load(self) -> Module:
         model = Sequential()
