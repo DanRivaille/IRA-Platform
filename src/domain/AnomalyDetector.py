@@ -90,7 +90,8 @@ class AnomalyDetector:
         test_params = self.__config.get_params('test_params')
         feature_threshold_list = np.linspace(test_params['min_feature_threshold'], test_params['max_feature_threshold'],
                                              test_params['number_feature_thresholds_to_try'])
-        macroseq_threshold_list = np.linspace(0.4, 0.6, 10)
+        macroseq_threshold_list = np.linspace(test_params['min_macroseq_threshold'], test_params['max_macroseq_threshold'],
+                                             test_params['number_macroseq_thresholds_to_try'])
 
         max_auc = -1
         max_f1 = -1.0

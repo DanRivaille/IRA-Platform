@@ -144,6 +144,7 @@ class KerasModel(MLModel):
         @return Tuple: (predictions, errors per sample)
         """
         sequences_predicted = self.model.predict(dataloader, verbose=0)
+        dataloader = np.expand_dims(dataloader, axis=-1)
         error_per_sample = mean_squared_error(dataloader, sequences_predicted).numpy()
 
         if return_per_sample:
