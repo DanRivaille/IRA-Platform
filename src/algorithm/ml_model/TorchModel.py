@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from src.algorithm.ml_model.History import History
 from src.algorithm.ml_model.MLModel import MLModel
 from src.algorithm.ml_model.ModelType import ModelType
-from src.algorithm.ml_model.models.Autoencoder import Autoencoder
+from src.algorithm.ml_model.models.LSTMAutoencoder import LSTMAutoencoder
 from src.config.ConfigParams import ConfigParams
 from src.utils.Plotter import Plotter
 
@@ -28,7 +28,7 @@ class TorchModel(MLModel):
 
         self.device = TorchModel.__get_device()
 
-        self.model: Module = Autoencoder(input_length)
+        self.model: Module = LSTMAutoencoder()
         self.model.to(self.device)
 
         self.criterion = MSELoss
@@ -149,20 +149,21 @@ class TorchModel(MLModel):
 
         with gradient():
             for databatch in dataloader:
-                batch = databatch.to(self.device)
-                output = self.model(batch)
+                for data in databatch:
+                    batch = data.unsqueeze(1).to(self.device)
+                    output = self.model(batch)
 
-                if 'none' == criterion_reduction:
-                    current_batch_loss = np.mean(criterion(output, batch.data).cpu().numpy(), axis=1)
-                else:
-                    current_batch_loss = criterion(output, batch.data)
+                    if 'none' == criterion_reduction:
+                        current_batch_loss = np.mean(criterion(output, batch.data).cpu().numpy(), axis=1)
+                    else:
+                        current_batch_loss = criterion(output, batch.data)
 
-                losses.append(current_batch_loss)
+                    losses.append(current_batch_loss)
 
-                if is_train_data:
-                    self.optimizer.zero_grad()
-                    losses[-1].backward()
-                    self.optimizer.step()
+                    if is_train_data:
+                        self.optimizer.zero_grad()
+                        losses[-1].backward()
+                        self.optimizer.step()
 
         if 'none' == criterion_reduction:
             return None, np.concatenate(losses).flatten()
