@@ -130,7 +130,6 @@ class KerasModel(MLModel):
         _, train_error_per_sample = self.predict(trainloader, return_per_sample=True)
         learning_rate_uptating = np.array(history_dict['lr']).tolist()
         return History(history_dict['loss'], history_dict['val_loss'], learning_rate_uptating, train_error_per_sample, elapsed_time)
-        pass
 
     # TODO: Check this function
     def test(self, config: ConfigParams, testloader: np.ndarray, validationloader: np.ndarray):
